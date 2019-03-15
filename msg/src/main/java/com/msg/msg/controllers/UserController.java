@@ -52,6 +52,11 @@ public class UserController {
 	public List<User> getTrainerByTypeAndPrice(@PathVariable int idtraining_type, @PathVariable double price) {
 		return userRepository.findTrainerByTypeAndPrice(idtraining_type, price);
 	}
+	
+	@GetMapping("trainer-price/{price}")
+	public List<User> getTrainerByPrice(@PathVariable double price){
+		return userRepository.findTrainerByPrice(price);
+	}
 
 	@PostMapping("user/{username}/{password}")
 	public User gettLoggedInUser(@PathVariable String username, @PathVariable String password) {

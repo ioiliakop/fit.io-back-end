@@ -11,18 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.msg.entities.Message;
+import com.msg.msg.entities.User;
 import com.msg.msg.repositories.MessageRepository;
+import com.msg.msg.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/messages")
 public class MsgController {
 
-	private MessageRepository messageRepository;
+	@Autowired
+	public MessageRepository messageRepository;
 
 	@Autowired
-	public MsgController(MessageRepository messageRepository) {
-		this.messageRepository = messageRepository;
-	}
+	public UserRepository userRepository;
 
 	@GetMapping("/sent/{fk_sender_id}")
 	public List<Message> getSentMessages(@PathVariable int fk_sender_id) {
@@ -39,8 +40,11 @@ public class MsgController {
 		return messageRepository.findUserMessages(fk_receiver_id, fk_sender_id, fk_sender_id, fk_receiver_id);
 	}
 	
-	@PutMapping("/save")
-	public void sendMessage(@RequestBody Message message) {
+	@PutMapping("/save/{fk_sender_id}/{fk_receiver_id}")
+	public void sendMessage(@PathVariable int fk_sender_id,@PathVariable int fk_receiver_id, @RequestBody String content) {
+		User sender = userRepository.findById(fk_sender_id);
+		User receiver = userRepository.findById(fk_receiver_id);
+		Message message = new Message(sender,receiver,content);
 		messageRepository.save(message);
 	}
 	
