@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -84,6 +86,26 @@ public class DatabaseHelper {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
+	
+//	public static List<User> getTrainersByTypeAndArea(String type, String city){
+//		try(Connection conn=getConnection();
+//			PreparedStatement ps=conn.prepareStatement("select user.iduser, user.username,user.password,user.role, user.first_name,user.last_name,user.email,user.price,user.description from user, trainer_area,  trainer_specialization, area ,training_type where user.iduser=trainer_specialization.fk_trainer_id and user.iduser=trainer_area.fk_trainer_id and training_type.idtraining_type=trainer_specialization.fk_training_type and area.idarea=trainer_area.fk_area_id and training_type.specialization_title=?  and area.city=? ");
+//				) {
+//			List<User> users= new ArrayList<User>();
+//			ps.setString(1, type);
+//			ps.setString(2, city);
+//			ResultSet rs=null;
+//			rs=ps.executeQuery();
+//			while(rs.next()) {
+////				User user= new User(rs.getInt("iduser"), rs.getString("username"), rs.getString("password"), rs.getInt("role"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getDouble("price"), rs.getString("description"));
+//				User user2= new	 User(67, "theoroo3", "1234", 1, "theodorosDSa", "bnouras", "dam@hod.com", 9.0, "hffo ddj");
+//				users.add(user2);
+//			}
+//			return users;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e.getMessage(), e);
+//		}
+//	}
 	
 
 

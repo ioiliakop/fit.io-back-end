@@ -34,7 +34,7 @@ public class User implements Serializable{
 	private String password;
 
 	@Column(name = "role")
-	private String role;
+	private int role;
 
 	@Column(name = "first_name")
 	private String firstName;
@@ -81,7 +81,7 @@ public class User implements Serializable{
 
 	
 	
-	public User(int id, String username, String password, String role, String firstName, String lastName, String email,
+	public User(int id, String username, String password, int role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.id = id;
 		this.username = username;
@@ -96,7 +96,7 @@ public class User implements Serializable{
 
 
 
-	public User( String username, String password, String role, String firstName, String lastName, String email,
+	public User( String username, String password, int role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.username = username;
 		this.password = password;
@@ -134,11 +134,11 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public String getRole() {
+	public int getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 
