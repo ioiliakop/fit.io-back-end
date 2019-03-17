@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.UserRepository;
 
@@ -24,12 +25,13 @@ public class UserController {
 	}
 
 	@GetMapping("/trainer/{specialization_title}/{city}")
-	public List<User> getYourTrainer(@PathVariable String specialization_title, String city) {
+	public List<User> getYourTrainer(@PathVariable String specialization_title,@PathVariable String city) {
+//		return DatabaseHelper.getTrainersByTypeAndArea(specialization_title, city);
 		return userRepository.findTrainerByAreaAndType(specialization_title, city);
 	}
 	
 	@GetMapping("/trainer/{specialization_title}/{city}/{price}")
-	public List<User> getYourTrainer(@PathVariable String specialization_title, String city, double price) {
+	public List<User> getYourTrainer(@PathVariable String specialization_title,@PathVariable String city,@PathVariable double price) {
 		return userRepository.findTrainerByAreaAndTypeAndPrice(specialization_title, city, price);
 	}
 
@@ -48,7 +50,7 @@ public class UserController {
 		return userRepository.findTrainerByType(idtraining_type);
 	}
 	
-	@GetMapping("trainer-type-price/{idtraining_type}")
+	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
 	public List<User> getTrainerByTypeAndPrice(@PathVariable int idtraining_type, @PathVariable double price) {
 		return userRepository.findTrainerByTypeAndPrice(idtraining_type, price);
 	}

@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,7 +34,7 @@ public class User implements Serializable{
 	private String password;
 
 	@Column(name = "role")
-	private String role;
+	private int role;
 
 	@Column(name = "first_name")
 	private String firstName;
@@ -70,14 +71,33 @@ public class User implements Serializable{
 	@JsonIgnore
 	private List<TrainingSession> trainerSessions;
 	
+//	@OneToOne(mappedBy="user")
+	@OneToMany(mappedBy="user")
+	@JsonIgnore
+	private List<Token> tokens;
+	
 	public User() {
 	}
 
 	
-
-	public User(int id, String username, String password, String role, String firstName, String lastName, String email,
+	
+	public User(int id, String username, String password, int role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.price = price;
+		this.description = description;
+	}
+
+
+
+	public User( String username, String password, int role, String firstName, String lastName, String email,
+			double price, String description) {
 		this.username = username;
 		this.password = password;
 		this.role = role;
@@ -114,11 +134,11 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public String getRole() {
+	public int getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 
@@ -190,7 +210,8 @@ public class User implements Serializable{
 		this.toMsgs = toMsgs;
 	}
 	
-	
+
+
 
 	public List<TrainingSession> getClientSessions() {
 		return clientSessions;
@@ -206,6 +227,15 @@ public class User implements Serializable{
 
 	public void setTrainerSessions(List<TrainingSession> trainerSessions) {
 		this.trainerSessions = trainerSessions;
+	}
+	
+	
+	public List<Token> getTokens() {
+		return tokens;
+	}
+
+	public void setTokens(List<Token> tokens) {
+		this.tokens = tokens;
 	}
 
 	@Override
