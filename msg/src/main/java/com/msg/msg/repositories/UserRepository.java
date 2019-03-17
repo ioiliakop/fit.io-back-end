@@ -4,15 +4,23 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.msg.msg.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	@Query(value = "SELECT user.iduser,user.username,user.password,user.role,user.first_name,user.last_name,user.email,user.price,user.description FROM user,training_type,trainer_specialization,trainer_area,area"
-			+ " where user.iduser=trainer_specialization.fk_trainer_id and trainer_specialization.fk_training_type = training_type.idtraining_type and "
-			+ "user.iduser=trainer_area.fk_trainer_id and trainer_area.fk_area_id=area.idarea and specialization_title = ?1 and"
-			+ " city= ?2 ", nativeQuery = true)
+//	@Query(value = "SELECT user.iduser,user.username,user.password,user.role,user.first_name,user.last_name,user.email,user.price,user.description FROM user,training_type,trainer_specialization,trainer_area,area"
+//			+ " where user.iduser=trainer_specialization.fk_trainer_id and trainer_specialization.fk_training_type = training_type.idtraining_type and "
+//			+ "user.iduser=trainer_area.fk_trainer_id and trainer_area.fk_area_id=area.idarea and specialization_title = ?1 and"
+//			+ " city= ?2 ", nativeQuery = true)
+//	List<User> findTrainerByAreaAndType(String specialization_title, String city);
+
+	@Query(value = "select user.iduser, user.username,user.password,user.role, user.first_name,user.last_name,user.email,user.price,user.description\r\n" + 
+			"from user, trainer_area,  trainer_specialization, area ,training_type\r\n" + 
+			"where user.iduser=trainer_specialization.fk_trainer_id and user.iduser=trainer_area.fk_trainer_id and \r\n" + 
+			"training_type.idtraining_type=trainer_specialization.fk_training_type and area.idarea=trainer_area.fk_area_id\r\n" + 
+			"and training_type.specialization_title= ?1 and area.city= ?2", nativeQuery = true)
 	List<User> findTrainerByAreaAndType(String specialization_title, String city);
 
 	@Query(value = "SELECT user.iduser,user.username,user.password,user.role,user.first_name,user.last_name,user.email,user.price,user.description FROM user,training_type,trainer_specialization,trainer_area,area"
