@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.TrainingSession;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.TrainingSessionRepository;
@@ -31,9 +33,16 @@ public class TrainingSessionController {
 //		return trainingSessionRepository.findTrainersSessions(fk_trainer_id);
 //	}
 	
-	@GetMapping("/trainer-sessions/{trainerUsername}")
-	public List<TrainingSession> getTrainersSessions(@PathVariable String trainerUsername) {
-		User trainer= userRepository.findByUsername(trainerUsername);
+//	@GetMapping("/trainer-sessions/{trainerUsername}")
+//	public List<TrainingSession> getTrainersSessions(@PathVariable String trainerUsername) {
+//		User trainer= userRepository.findByUsername(trainerUsername);
+//		return trainingSessionRepository.findTrainersSessions(trainer.getId());
+//	}
+	
+	@GetMapping("/trainer-sessions")
+	public List<TrainingSession> getTrainersSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
+		int id = DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		User trainer = userRepository.findById(id);
 		return trainingSessionRepository.findTrainersSessions(trainer.getId());
 	}
 
@@ -42,9 +51,16 @@ public class TrainingSessionController {
 //		return trainingSessionRepository.findUserSessions(fk_client_id);
 //	}
 	
-	@GetMapping("/client-sessions/{clientUsername}")
-	public List<TrainingSession> getClientSessions(@PathVariable String clientUsername) {
-		User client=userRepository.findByUsername(clientUsername);
+//	@GetMapping("/client-sessions/{clientUsername}")
+//	public List<TrainingSession> getClientSessions(@PathVariable String clientUsername) {
+//		User client=userRepository.findByUsername(clientUsername);
+//		return trainingSessionRepository.findUserSessions(client.getId());
+//	}
+	
+	@GetMapping("/client-sessions")
+	public List<TrainingSession> getClientSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
+		int id = DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		User client = userRepository.findById(id);
 		return trainingSessionRepository.findUserSessions(client.getId());
 	}
 

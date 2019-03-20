@@ -62,9 +62,9 @@ public class UserController {
 		return userRepository.findTrainerByPrice(price);
 	}
 
-	@PostMapping("user/{username}/{password}")
-	public User gettLoggedInUser(@PathVariable String username, @PathVariable String password) {
-		return userRepository.findByUsernameAndPassword(username, password);
-	}
+//	@PostMapping("user/{username}/{password}")
+//	public User gettLoggedInUser(@PathVariable String username, @PathVariable String password) {
+//		return userRepository.findByUsernameAndPassword(username, password);
+//	}
 
 }
