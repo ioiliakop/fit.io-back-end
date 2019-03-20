@@ -3,14 +3,15 @@ package com.msg.msg.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.encryption.CryptoConverter;
+import com.msg.msg.entities.Login;
 import com.msg.msg.entities.Token;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.TokenRepository;
@@ -27,8 +28,10 @@ public class LoginController {
 	@Autowired
 	public TokenRepository tokenRepository;
 
-	@PostMapping("/user/{username}/{password}")
-	public Token loginUser(@PathVariable String username, @PathVariable String password) {
+	@PostMapping("/user")
+	public Token loginUser( @RequestBody Login login) {
+		String username = login.getUsername();
+		String password = login.getPassword();
 		User user = userRepository.findByUsernameAndPassword(username,CryptoConverter.encrypt(password));
 		Token token = DatabaseHelper.createToken(user);
 		return token;

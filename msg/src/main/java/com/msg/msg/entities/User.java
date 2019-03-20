@@ -10,15 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
-public class User implements Serializable{
-
+public class User implements Serializable {
 
 	private static final long serialVersionUID = -6440695620165525838L;
 
@@ -41,16 +39,16 @@ public class User implements Serializable{
 
 	@Column(name = "last_name")
 	private String lastName;
-	
+
 	@Column(name = "email")
 	private String email;
-	
+
 	@Column(name = "price")
 	private double price;
-	
+
 	@Column(name = "description")
 	private String description;
-	
+
 	@OneToMany
 	@JoinColumn(name = "fk_sender_id", referencedColumnName = "iduser")
 	@JsonIgnore
@@ -60,7 +58,7 @@ public class User implements Serializable{
 	@JoinColumn(name = "fk_receiver_id", referencedColumnName = "iduser")
 	@JsonIgnore
 	private List<Message> toMsgs;
-	
+
 	@OneToMany
 	@JoinColumn(name = "fk_client_id", referencedColumnName = "iduser")
 	@JsonIgnore
@@ -70,17 +68,15 @@ public class User implements Serializable{
 	@JoinColumn(name = "fk_trainer_id", referencedColumnName = "iduser")
 	@JsonIgnore
 	private List<TrainingSession> trainerSessions;
-	
+
 //	@OneToOne(mappedBy="user")
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy = "user")
 	@JsonIgnore
 	private List<Token> tokens;
-	
+
 	public User() {
 	}
 
-	
-	
 	public User(int id, String username, String password, int role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.id = id;
@@ -94,9 +90,7 @@ public class User implements Serializable{
 		this.description = description;
 	}
 
-
-
-	public User( String username, String password, int role, String firstName, String lastName, String email,
+	public User(String username, String password, int role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.username = username;
 		this.password = password;
@@ -107,8 +101,6 @@ public class User implements Serializable{
 		this.price = price;
 		this.description = description;
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -125,10 +117,10 @@ public class User implements Serializable{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-//
-//	public String getPassword() {
-//		return password;
-//	}
+
+	public String retrievePassword() {
+		return password;
+	}
 
 	public void setPassword(String password) {
 		this.password = password;
@@ -162,37 +154,25 @@ public class User implements Serializable{
 		return email;
 	}
 
-
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-
 
 	public double getPrice() {
 		return price;
 	}
 
-
-
 	public void setPrice(double price) {
 		this.price = price;
 	}
-
-
 
 	public String getDescription() {
 		return description;
 	}
 
-
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-
 
 	public List<Message> getFromMsgs() {
 		return fromMsgs;
@@ -209,9 +189,6 @@ public class User implements Serializable{
 	public void setToMsgs(List<Message> toMsgs) {
 		this.toMsgs = toMsgs;
 	}
-	
-
-
 
 	public List<TrainingSession> getClientSessions() {
 		return clientSessions;
@@ -228,8 +205,7 @@ public class User implements Serializable{
 	public void setTrainerSessions(List<TrainingSession> trainerSessions) {
 		this.trainerSessions = trainerSessions;
 	}
-	
-	
+
 	public List<Token> getTokens() {
 		return tokens;
 	}
@@ -238,8 +214,6 @@ public class User implements Serializable{
 		this.tokens = tokens;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", role=" + role + ", firstName=" + firstName
@@ -247,9 +221,5 @@ public class User implements Serializable{
 				+ ", fromMsgs=" + fromMsgs + ", toMsgs=" + toMsgs + ", clientSessions=" + clientSessions
 				+ ", trainerSessions=" + trainerSessions + ", tokens=" + tokens + "]";
 	}
-
-
-
-
 
 }

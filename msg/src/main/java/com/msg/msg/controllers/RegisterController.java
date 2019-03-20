@@ -22,16 +22,17 @@ public class RegisterController {
 	@Autowired
 	public UserRepository userRepository;
 
-	@PostMapping("/save/{password}")
-	public void registerUser(@Valid @RequestBody User user, @PathVariable String password) {
+	@PostMapping("/save")
+	public void registerUser(@RequestBody User user) {
       User user2 = userRepository.findByUsername(user.getUsername());
       
 		if (user2 == null) {
-			user.setPassword(CryptoConverter.encrypt(password));
+			user.setPassword(CryptoConverter.encrypt(user.retrievePassword()));
 			userRepository.save(user);
 		} else {
 			throw new RuntimeException("username already exists,try another");
 		}
 	}
+	
 
 }
