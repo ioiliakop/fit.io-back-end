@@ -1,38 +1,34 @@
 package com.msg.msg.entities;
 
-
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Token implements Serializable {
 
-	
 	private static final long serialVersionUID = 1525865422256695772L;
 
 	@Id
 	@GeneratedValue
 	private int token_id;
-	
-	@Column(name="alphanumeric")
+
+	@Column(name = "alphanumeric")
 	private String alphanumeric;
-	
+
 //	@OneToOne(cascade=CascadeType.ALL)
 //	@JoinColumn(name="iduser", referencedColumnName="iduser")
 	@ManyToOne
-	@JoinColumn(name="iduser")
+	@JoinColumn(name = "iduser")
 	private User user;
-	
-	@Column(name="date_of_creation")
+
+	@Column(name = "date_of_creation")
 	private Date date_of_creation;
 
 	public Token() {
@@ -41,9 +37,8 @@ public class Token implements Serializable {
 	public Token(String alphanumeric, User user) {
 		this.alphanumeric = alphanumeric;
 		this.user = user;
-		this.date_of_creation=new Date();
+		this.date_of_creation = new Date();
 	}
-
 
 	public int getToken_id() {
 		return token_id;
@@ -83,6 +78,4 @@ public class Token implements Serializable {
 				+ ", date_of_creation=" + date_of_creation + "]";
 	}
 
-	
-	
 }

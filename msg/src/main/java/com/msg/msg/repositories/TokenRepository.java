@@ -1,6 +1,5 @@
 package com.msg.msg.repositories;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,10 +11,10 @@ import com.msg.msg.entities.Token;
 import com.msg.msg.entities.User;
 
 public interface TokenRepository extends JpaRepository<Token, Integer> {
-	
+
 	List<Token> findByUser(User user);
-	
+
 	@Modifying
-	@Query(value="insert into token (alphanumeric, iduser) values (:alphanumeric , :iduser)", nativeQuery = true)
-	void insertToken(@Param("alphanumeric") String alphanumeric,@Param("iduser") int iduser);
+	@Query(value = "insert into token (alphanumeric, iduser) values (:alphanumeric , :iduser)", nativeQuery = true)
+	void insertToken(@Param("alphanumeric") String alphanumeric, @Param("iduser") int iduser);
 }

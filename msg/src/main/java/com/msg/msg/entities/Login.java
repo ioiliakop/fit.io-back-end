@@ -1,11 +1,9 @@
 package com.msg.msg.entities;
 
-import javax.persistence.Entity;
-
 public class Login {
-	
+
 	private String username;
-	
+
 	private String password;
 
 	public Login() {
@@ -31,7 +29,5 @@ public class Login {
 	public String toString() {
 		return "Login [username=" + username + ", password=" + password + "]";
 	}
-	
-	
 
 }

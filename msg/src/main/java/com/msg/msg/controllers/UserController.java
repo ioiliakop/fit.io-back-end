@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.UserRepository;
 
@@ -28,7 +26,6 @@ public class UserController {
 
 	@GetMapping("/trainer/{specialization_title}/{city}")
 	public List<User> getYourTrainer(@PathVariable String specialization_title,@PathVariable String city) {
-//		return DatabaseHelper.getTrainersByTypeAndArea(specialization_title, city);
 		return userRepository.findTrainerByAreaAndType(specialization_title, city);
 	}
 	

@@ -14,7 +14,6 @@ import com.msg.msg.encryption.CryptoConverter;
 import com.msg.msg.entities.Login;
 import com.msg.msg.entities.Token;
 import com.msg.msg.entities.User;
-import com.msg.msg.repositories.TokenRepository;
 import com.msg.msg.repositories.UserRepository;
 
 @RestController
@@ -22,17 +21,18 @@ import com.msg.msg.repositories.UserRepository;
 @CrossOrigin(origins = "*")
 public class LoginController {
 
-	@Autowired
-	public UserRepository userRepository;
+	private UserRepository userRepository;
 
 	@Autowired
-	public TokenRepository tokenRepository;
+	public LoginController(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@PostMapping("/user")
-	public Token loginUser( @RequestBody Login login) {
+	public Token loginUser(@RequestBody Login login) {
 		String username = login.getUsername();
 		String password = login.getPassword();
-		User user = userRepository.findByUsernameAndPassword(username,CryptoConverter.encrypt(password));
+		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
 		Token token = DatabaseHelper.createToken(user);
 		return token;
 	}

@@ -1,10 +1,7 @@
 package com.msg.msg.controllers;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +16,17 @@ import com.msg.msg.repositories.UserRepository;
 @CrossOrigin(origins = "*")
 public class RegisterController {
 
+	private UserRepository userRepository;
+
 	@Autowired
-	public UserRepository userRepository;
+	public RegisterController(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@PostMapping("/save")
 	public void registerUser(@RequestBody User user) {
-      User user2 = userRepository.findByUsername(user.getUsername());
-      
+		User user2 = userRepository.findByUsername(user.getUsername());
+
 		if (user2 == null) {
 			user.setPassword(CryptoConverter.encrypt(user.retrievePassword()));
 			userRepository.save(user);
@@ -33,6 +34,5 @@ public class RegisterController {
 			throw new RuntimeException("username already exists,try another");
 		}
 	}
-	
 
 }
