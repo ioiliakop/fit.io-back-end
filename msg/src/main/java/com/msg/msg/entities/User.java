@@ -125,7 +125,7 @@ public class User implements Serializable{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+//
 //	public String getPassword() {
 //		return password;
 //	}
@@ -238,12 +238,17 @@ public class User implements Serializable{
 		this.tokens = tokens;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", price=" + price
-				+ ", description=" + description + "]";
+		return "User [id=" + id + ", username=" + username + ", role=" + role + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", email=" + email + ", price=" + price + ", description=" + description
+				+ ", fromMsgs=" + fromMsgs + ", toMsgs=" + toMsgs + ", clientSessions=" + clientSessions
+				+ ", trainerSessions=" + trainerSessions + ", tokens=" + tokens + "]";
 	}
+
+
 
 
 

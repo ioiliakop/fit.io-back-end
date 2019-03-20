@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.msg.database.DatabaseHelper;
+import com.msg.msg.encryption.CryptoConverter;
 import com.msg.msg.entities.Token;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.TokenRepository;
@@ -28,7 +29,7 @@ public class LoginController {
 
 	@PostMapping("/user/{username}/{password}")
 	public Token loginUser(@PathVariable String username, @PathVariable String password) {
-		User user = userRepository.findByUsernameAndPassword(username, password);
+		User user = userRepository.findByUsernameAndPassword(username,CryptoConverter.encrypt(password));
 		Token token = DatabaseHelper.createToken(user);
 		return token;
 	}
