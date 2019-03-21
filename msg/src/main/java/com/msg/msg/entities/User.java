@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -31,8 +32,9 @@ public class User implements Serializable {
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "role")
-	private int role;
+	@JoinColumn(name = "fk_role_id", referencedColumnName = "id")
+	@ManyToOne
+	private Role role;
 
 	@Column(name = "first_name")
 	private String firstName;
@@ -69,7 +71,6 @@ public class User implements Serializable {
 	@JsonIgnore
 	private List<TrainingSession> trainerSessions;
 
-//	@OneToOne(mappedBy="user")
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
 	private List<Token> tokens;
@@ -77,7 +78,7 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(int id, String username, String password, int role, String firstName, String lastName, String email,
+	public User(int id, String username, String password, Role role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.id = id;
 		this.username = username;
@@ -90,7 +91,7 @@ public class User implements Serializable {
 		this.description = description;
 	}
 
-	public User(String username, String password, int role, String firstName, String lastName, String email,
+	public User(String username, String password, Role role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.username = username;
 		this.password = password;
@@ -126,11 +127,12 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public int getRole() {
+
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(int role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 
@@ -218,8 +220,8 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", role=" + role + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", email=" + email + ", price=" + price + ", description=" + description
-				+ ", fromMsgs=" + fromMsgs + ", toMsgs=" + toMsgs + ", clientSessions=" + clientSessions
-				+ ", trainerSessions=" + trainerSessions + ", tokens=" + tokens + "]";
+				+ "]";
 	}
+
 
 }

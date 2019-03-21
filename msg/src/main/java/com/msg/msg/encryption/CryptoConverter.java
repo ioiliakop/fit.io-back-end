@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class CryptoConverter {
 	
 	private static final String ALGORITHM = "AES/ECB/PKCS5Padding";
-    private static final byte[] KEY = "NsP#ikr0Ol$1697!".getBytes(); //16 bytes length allowable AES Key length
+    private static final byte[] KEY = "NsP#ikr0Ol$1697!".getBytes();
 
     public static String encrypt(String pwd) {
       Key key = new SecretKeySpec(KEY, "AES");
