@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.UserRepository;
 
@@ -57,6 +58,16 @@ public class UserController {
 	@GetMapping("trainer-price/{price}")
 	public List<User> getTrainerByPrice(@PathVariable double price){
 		return userRepository.findTrainerByPrice(price);
+	}
+	 
+	@GetMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")
+	public void chooseArea(@PathVariable int fk_trainer_id,@PathVariable int fk_area_id){
+		DatabaseHelper.trainerArea(fk_trainer_id, fk_area_id);
+	}
+	
+	@GetMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
+	public void trainerSpecialization(@PathVariable int fk_trainer_id,@PathVariable int fk_training_type){
+		DatabaseHelper.trainerSpecialization(fk_trainer_id, fk_training_type);
 	}
 
 //	@PostMapping("user/{username}/{password}")

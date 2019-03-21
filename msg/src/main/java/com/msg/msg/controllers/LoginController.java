@@ -14,6 +14,7 @@ import com.msg.msg.encryption.CryptoConverter;
 import com.msg.msg.entities.Login;
 import com.msg.msg.entities.Token;
 import com.msg.msg.entities.User;
+import com.msg.msg.repositories.TokenRepository;
 import com.msg.msg.repositories.UserRepository;
 
 @RestController
@@ -21,12 +22,12 @@ import com.msg.msg.repositories.UserRepository;
 @CrossOrigin(origins = "*")
 public class LoginController {
 
-	private UserRepository userRepository;
+	@Autowired
+	public UserRepository userRepository;
 
 	@Autowired
-	public LoginController(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+	public TokenRepository tokenRepository;
+
 
 	@PostMapping("/user")
 	public Token loginUser(@RequestBody Login login) {
@@ -39,7 +40,7 @@ public class LoginController {
 
 	@GetMapping("/userFromToken")
 	public User getFromToken(@RequestHeader("X-MSG-AUTH") String alphanumeric) {
-		int userId = DatabaseHelper.getUserIDFromTokenAlphaNumeric(alphanumeric);
+		int userId = tokenRepository.getUserIDFromTokenAlphaNumeric(alphanumeric);
 		return userRepository.findById(userId);
 	}
 

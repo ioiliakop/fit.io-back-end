@@ -28,13 +28,17 @@ public class Role {
 	@OneToMany
 	@JoinColumn(name = "fk_role_id", referencedColumnName = "id")
 	@JsonIgnore
-	private List<Role> users;
+	private List<User> users;
 
 	public Role() {
 	}
 
 	public Role(int id, String name) {
 		this.id = id;
+		this.name = name;
+	}
+	
+	public Role(String name) {
 		this.name = name;
 	}
 
@@ -54,13 +58,15 @@ public class Role {
 		this.name = name;
 	}
 
-	public List<Role> getUsers() {
+
+	public List<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<Role> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
 
 	@Override
 	public String toString() {

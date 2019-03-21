@@ -1,20 +1,16 @@
 package com.msg.msg.repositories;
 
-import java.util.List;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import com.msg.msg.entities.Token;
-import com.msg.msg.entities.User;
 
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 
-	List<Token> findByUser(User user);
+	@Query(value = "select iduser from token where alphanumeric=?", nativeQuery = true)
+	int getUserIDFromTokenAlphaNumeric(String alphanumeric);
 
-	@Modifying
-	@Query(value = "insert into token (alphanumeric, iduser) values (:alphanumeric , :iduser)", nativeQuery = true)
-	void insertToken(@Param("alphanumeric") String alphanumeric, @Param("iduser") int iduser);
+	
 }

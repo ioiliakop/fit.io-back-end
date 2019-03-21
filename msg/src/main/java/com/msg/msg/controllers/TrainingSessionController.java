@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.TrainingSession;
 import com.msg.msg.entities.User;
+import com.msg.msg.repositories.TokenRepository;
 import com.msg.msg.repositories.TrainingSessionRepository;
 import com.msg.msg.repositories.UserRepository;
 
@@ -25,6 +25,9 @@ public class TrainingSessionController {
 
 	@Autowired
 	public UserRepository userRepository;
+	
+	@Autowired
+	public TokenRepository tokenRepository;
 	
 
 //	@GetMapping("/trainer-sessions/{fk_trainer_id}")
@@ -40,7 +43,7 @@ public class TrainingSessionController {
 	
 	@GetMapping("/trainer-sessions")
 	public List<TrainingSession> getTrainersSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
-		int id = DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User trainer = userRepository.findById(id);
 		return trainingSessionRepository.findTrainersSessions(trainer.getId());
 	}
@@ -58,7 +61,7 @@ public class TrainingSessionController {
 	
 	@GetMapping("/client-sessions")
 	public List<TrainingSession> getClientSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
-		int id = DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User client = userRepository.findById(id);
 		return trainingSessionRepository.findUserSessions(client.getId());
 	}

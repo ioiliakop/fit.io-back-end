@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.Message;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.MessageRepository;
+import com.msg.msg.repositories.TokenRepository;
 import com.msg.msg.repositories.UserRepository;
 
 @RestController
@@ -29,6 +29,9 @@ public class MsgController {
 	@Autowired
 	public UserRepository userRepository;
 
+	@Autowired
+	public TokenRepository tokenRepository;
+	
 //	@GetMapping("/sent/{fk_sender_id}")
 //	public List<Message> getSentMessages(@PathVariable int fk_sender_id) {
 //		return messageRepository.findSentMessages(fk_sender_id);
@@ -36,7 +39,7 @@ public class MsgController {
 
 	@GetMapping("/sent")
 	public List<Message> getSentMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
-		int senderId=DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int senderId=tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User sender=userRepository.findById(senderId);
 		return messageRepository.findSentMessages(sender.getId());
 	}
@@ -48,7 +51,7 @@ public class MsgController {
 	
 	@GetMapping("/inbox")	
 	public List<Message> getInboxMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
-		int receiverId=DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int receiverId=tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User receiver=userRepository.findById(receiverId);
 		return messageRepository.findInboxMessages(receiver.getId());
 	}
@@ -60,7 +63,7 @@ public class MsgController {
 	
 	@GetMapping("/UsersMsg/{receiverUsername}")
 	public List<Message> getUserMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric, @PathVariable String receiverUsername) {
-		int senderId=DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int senderId=tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User sender=userRepository.findById(senderId);
 		User receiver=userRepository.findByUsername(receiverUsername);
 		return messageRepository.findUserMessages(receiver.getId(), sender.getId(), sender.getId(), receiver.getId());
@@ -76,7 +79,7 @@ public class MsgController {
 	
 	@PutMapping("/save/{receiverUsername}")
 	public void sendMessage(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,@PathVariable String receiverUsername, @RequestBody String content) {
-		int senderId=DatabaseHelper.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int senderId=tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User sender = userRepository.findById(senderId);
 		User receiver = userRepository.findByUsername(receiverUsername);
 		Message message = new Message(sender,receiver,content);
