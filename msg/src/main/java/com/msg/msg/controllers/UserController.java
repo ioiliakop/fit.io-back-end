@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,12 +60,12 @@ public class UserController {
 		return userRepository.findTrainerByPrice(price);
 	}
 	 
-	@PostMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")
+	@GetMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")
 	public void chooseArea(@PathVariable int fk_trainer_id,@PathVariable int fk_area_id){
 		DatabaseHelper.trainerArea(fk_trainer_id, fk_area_id);
 	}
 	
-	@PostMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
+	@GetMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
 	public void trainerSpecialization(@PathVariable int fk_trainer_id,@PathVariable int fk_training_type){
 		DatabaseHelper.trainerSpecialization(fk_trainer_id, fk_training_type);
 	}
