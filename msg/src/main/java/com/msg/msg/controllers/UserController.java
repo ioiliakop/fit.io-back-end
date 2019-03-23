@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,10 +70,15 @@ public class UserController {
 	public void trainerSpecialization(@PathVariable int fk_trainer_id,@PathVariable int fk_training_type){
 		DatabaseHelper.trainerSpecialization(fk_trainer_id, fk_training_type);
 	}
-
-//	@PostMapping("user/{username}/{password}")
-//	public User gettLoggedInUser(@PathVariable String username, @PathVariable String password) {
-//		return userRepository.findByUsernameAndPassword(username, password);
-//	}
+	
+	@PostMapping("trainer-remove-area/{fk_trainer_id}/{fk_area_id}")
+	public void removeArea(@PathVariable int fk_trainer_id,@PathVariable int fk_area_id){
+		DatabaseHelper.removeArea(fk_trainer_id, fk_area_id);
+	}
+	
+	@PostMapping("trainer-remove-type/{fk_trainer_id}/{fk_training_type}")
+	public void removeType(@PathVariable int fk_trainer_id,@PathVariable int fk_training_type){
+		DatabaseHelper.removeType(fk_trainer_id, fk_training_type);
+	}
 
 }

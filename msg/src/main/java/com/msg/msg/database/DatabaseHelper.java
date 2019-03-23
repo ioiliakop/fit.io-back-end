@@ -95,4 +95,40 @@ public class DatabaseHelper {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
+
+	public static void cancelSession(int sessionId) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn.prepareStatement(
+						"delete from training_session where idtraining_session = ?");) {
+			ps.setInt(1, sessionId);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	public static void removeArea(int trainerId, int areaId) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn.prepareStatement(
+						"delete from trainer_area where fk_trainer_id = ? and fk_area_id = ?");) {
+			ps.setInt(1, trainerId);
+			ps.setInt(2, areaId);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	public static void removeType(int trainerId, int typeId) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn.prepareStatement(
+						"delete from trainer_specialization where fk_trainer_id = ? and fk_training_type = ?");) {
+			ps.setInt(1, trainerId);
+			ps.setInt(2, typeId);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
 }

@@ -1,5 +1,6 @@
 package com.msg.msg.entities;
 
+import java.sql.Time;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -35,8 +36,11 @@ public class TrainingSession {
 	@ManyToOne
 	private TrainingType trainingType;
 
-	@Column(name = "scheduled_for")
+	@Column(name = "date")
 	private Date date;
+	
+	@Column(name = "time")
+	private Time time;
 	
 	@Column(name = "comments")
 	private String comments;
@@ -44,13 +48,14 @@ public class TrainingSession {
 	public TrainingSession() {
 	}
 
-	public TrainingSession(int id, User client, User trainer, Area area, TrainingType trainingType, Date date, String comments) {
-		this.id = id;
+	public TrainingSession(int id, User client, User trainer, Area area, TrainingType trainingType, Date date,
+			Time time, String comments) {
 		this.client = client;
 		this.trainer = trainer;
 		this.area = area;
 		this.trainingType = trainingType;
 		this.date = date;
+		this.time = time;
 		this.comments = comments;
 	}
 
@@ -102,6 +107,14 @@ public class TrainingSession {
 		this.date = date;
 	}
 
+	public Time getTime() {
+		return time;
+	}
+
+	public void setTime(Time time) {
+		this.time = time;
+	}
+
 	public String getComments() {
 		return comments;
 	}
@@ -113,8 +126,11 @@ public class TrainingSession {
 	@Override
 	public String toString() {
 		return "TrainingSession [id=" + id + ", client=" + client + ", trainer=" + trainer + ", area=" + area
-				+ ", trainingType=" + trainingType + ", date=" + date + ", comments=" + comments + "]";
+				+ ", trainingType=" + trainingType + ", date=" + date + ", time=" + time + ", comments=" + comments
+				+ "]";
 	}
+
+
 
 	
 
