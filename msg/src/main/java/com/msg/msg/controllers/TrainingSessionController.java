@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -98,8 +99,16 @@ public class TrainingSessionController {
 
 	}
 	
+	@PutMapping("/update/{idtraining_session}") 
+	public void addComment(@PathVariable int idtraining_session, @RequestBody String comments) {
+		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
+		trainingSession.setComments(comments);
+		trainingSessionRepository.save(trainingSession);
+		
+	}
+	
 	@GetMapping("/comments/{fk_trainer_id}")
-	public List<String> gettTrainersComments(@PathVariable int fk_trainer_id) {
+	public List<TrainingSession> gettTrainersComments(@PathVariable int fk_trainer_id) {
 		return trainingSessionRepository.trainersComments(fk_trainer_id);
 	}
 
