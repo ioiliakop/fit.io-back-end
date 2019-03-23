@@ -96,16 +96,16 @@ public class DatabaseHelper {
 		}
 	}
 
-	public static void cancelSession(int sessionId) {
-		try (Connection conn = getConnection();
-				PreparedStatement ps = conn.prepareStatement(
-						"delete from training_session where idtraining_session = ?");) {
-			ps.setInt(1, sessionId);
-			ps.executeUpdate();
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
-	}
+//	public static void cancelSession(int sessionId) {
+//		try (Connection conn = getConnection();
+//				PreparedStatement ps = conn.prepareStatement(
+//						"delete from training_session where idtraining_session = ?");) {
+//			ps.setInt(1, sessionId);
+//			ps.executeUpdate();
+//		} catch (Exception e) {
+//			throw new RuntimeException(e.getMessage(), e);
+//		}
+//	}
 	
 	public static void removeArea(int trainerId, int areaId) {
 		try (Connection conn = getConnection();

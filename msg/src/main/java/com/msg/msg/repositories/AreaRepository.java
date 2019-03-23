@@ -6,4 +6,5 @@ import com.msg.msg.entities.Area;
 
 public interface AreaRepository extends JpaRepository<Area, Integer>{
 
+	Area findById(int id);
 }

@@ -6,4 +6,5 @@ import com.msg.msg.entities.TrainingType;
 
 public interface TrainingTypeRepository extends JpaRepository<TrainingType, Integer>{
 
+	TrainingType findById(int id);
 }

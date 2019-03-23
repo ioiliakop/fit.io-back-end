@@ -37,10 +37,10 @@ public class TrainingSession {
 	private TrainingType trainingType;
 
 	@Column(name = "date")
-	private Date date;
+	private String date;
 	
 	@Column(name = "time")
-	private Time time;
+	private String time;
 	
 	@Column(name = "comments")
 	private String comments;
@@ -48,8 +48,8 @@ public class TrainingSession {
 	public TrainingSession() {
 	}
 
-	public TrainingSession(int id, User client, User trainer, Area area, TrainingType trainingType, Date date,
-			Time time, String comments) {
+	public TrainingSession(User client, User trainer, Area area, TrainingType trainingType, String date,
+			String time, String comments) {
 		this.client = client;
 		this.trainer = trainer;
 		this.area = area;
@@ -99,19 +99,19 @@ public class TrainingSession {
 		this.trainingType = trainingType;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
-	public Time getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(Time time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 
