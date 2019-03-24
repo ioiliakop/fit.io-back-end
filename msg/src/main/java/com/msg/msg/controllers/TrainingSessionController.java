@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.msg.entities.Area;
+import com.msg.msg.entities.Review;
 import com.msg.msg.entities.TrainingSession;
 import com.msg.msg.entities.TrainingType;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.AreaRepository;
+import com.msg.msg.repositories.ReviewRepository;
 import com.msg.msg.repositories.TokenRepository;
 import com.msg.msg.repositories.TrainingSessionRepository;
 import com.msg.msg.repositories.TrainingTypeRepository;
@@ -42,6 +44,9 @@ public class TrainingSessionController {
 
 	@Autowired
 	public AreaRepository areaRepository;
+	
+	@Autowired
+	public ReviewRepository reviewRepository;
 
 //	@GetMapping("/trainer-sessions/{fk_trainer_id}")
 //	public List<TrainingSession> getTrainersSessions(@PathVariable int fk_trainer_id) {
@@ -99,17 +104,22 @@ public class TrainingSessionController {
 
 	}
 	
-	@PutMapping("/update/{idtraining_session}") 
-	public void addComment(@PathVariable int idtraining_session, @RequestBody String comments) {
-		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
-		trainingSession.setComments(comments);
-		trainingSessionRepository.save(trainingSession);
-		
-	}
+//	@PutMapping("/update/{idtraining_session}") 
+//	public void addComment(@PathVariable int idtraining_session, @RequestBody String comments) {
+//		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
+//		trainingSession.setComments(comments);
+//		trainingSessionRepository.save(trainingSession);
+//		
+//	}
+//	
+//	@GetMapping("/comments/{fk_trainer_id}")
+//	public List<TrainingSession> getTrainersComments(@PathVariable int fk_trainer_id) {
+//		return trainingSessionRepository.trainersComments(fk_trainer_id);
+//	}
 	
-	@GetMapping("/comments/{fk_trainer_id}")
-	public List<TrainingSession> gettTrainersComments(@PathVariable int fk_trainer_id) {
-		return trainingSessionRepository.trainersComments(fk_trainer_id);
+	@GetMapping("/review/{idtraining_session}")
+	public Review getSessionReview(@PathVariable int idtraining_session) {
+		return reviewRepository.getSessionComment(idtraining_session);
 	}
 
 }
