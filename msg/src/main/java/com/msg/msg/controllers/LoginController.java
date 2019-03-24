@@ -1,5 +1,7 @@
 package com.msg.msg.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +31,25 @@ public class LoginController {
 	public TokenRepository tokenRepository;
 
 
+//	@PostMapping("/user")
+//	public Token loginUser(@RequestBody Login login) {
+//		String username = login.getUsername();
+//		String password = login.getPassword();
+//		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
+//		Token token = DatabaseHelper.createToken(user);
+//		return token;
+//	}
+	
 	@PostMapping("/user")
 	public Token loginUser(@RequestBody Login login) {
 		String username = login.getUsername();
 		String password = login.getPassword();
 		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
-		Token token = DatabaseHelper.createToken(user);
+		String alphanumeric = UUID.randomUUID().toString();
+//		tokenRepository.createToken(alphanumeric, user.getId());
+		Token token = new Token(alphanumeric,user);
+		tokenRepository.save(token);
+//		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		return token;
 	}
 
@@ -46,6 +61,7 @@ public class LoginController {
 
 	@PostMapping("/logout")
 	public void logout(@RequestHeader("X-MSG-AUTH") String alphanumeric) {
-		DatabaseHelper.logOutUser(alphanumeric);
+//		DatabaseHelper.logOutUser(alphanumeric);
+		tokenRepository.deleteByAlphanumeric(alphanumeric);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,14 +17,13 @@ public class Token implements Serializable {
 	private static final long serialVersionUID = 1525865422256695772L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "token_id")
 	private int token_id;
 
 	@Column(name = "alphanumeric")
 	private String alphanumeric;
 
-//	@OneToOne(cascade=CascadeType.ALL)
-//	@JoinColumn(name="iduser", referencedColumnName="iduser")
 	@ManyToOne
 	@JoinColumn(name = "iduser")
 	private User user;

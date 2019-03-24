@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.User;
+import com.msg.msg.repositories.AreaRepository;
+import com.msg.msg.repositories.TrainingTypeRepository;
 import com.msg.msg.repositories.UserRepository;
 
 @RestController
@@ -19,12 +21,14 @@ import com.msg.msg.repositories.UserRepository;
 @CrossOrigin(origins = "*")
 public class UserController {
 
-	private UserRepository userRepository;
+	@Autowired
+	public UserRepository userRepository;
 
 	@Autowired
-	public UserController(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+	public AreaRepository areaRepository;
+	
+	@Autowired
+	public TrainingTypeRepository trainingTypeRepository;
 
 	@GetMapping("/trainer/{specialization_title}/{city}")
 	public List<User> getYourTrainer(@PathVariable String specialization_title,@PathVariable String city) {
@@ -61,24 +65,28 @@ public class UserController {
 		return userRepository.findTrainerByPrice(price);
 	}
 	 
-	@GetMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")
+	@PostMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")
 	public void chooseArea(@PathVariable int fk_trainer_id,@PathVariable int fk_area_id){
-		DatabaseHelper.trainerArea(fk_trainer_id, fk_area_id);
+//		DatabaseHelper.trainerArea(fk_trainer_id, fk_area_id);
+		areaRepository.addArea(fk_trainer_id, fk_area_id);
 	}
 	
-	@GetMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
+	@PostMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
 	public void trainerSpecialization(@PathVariable int fk_trainer_id,@PathVariable int fk_training_type){
-		DatabaseHelper.trainerSpecialization(fk_trainer_id, fk_training_type);
+//		DatabaseHelper.trainerSpecialization(fk_trainer_id, fk_training_type);
+		trainingTypeRepository.addType(fk_trainer_id, fk_training_type);
 	}
 	
 	@PostMapping("trainer-remove-area/{fk_trainer_id}/{fk_area_id}")
 	public void removeArea(@PathVariable int fk_trainer_id,@PathVariable int fk_area_id){
-		DatabaseHelper.removeArea(fk_trainer_id, fk_area_id);
+//		DatabaseHelper.removeArea(fk_trainer_id, fk_area_id);
+		areaRepository.removeArea(fk_trainer_id, fk_area_id);
 	}
 	
 	@PostMapping("trainer-remove-type/{fk_trainer_id}/{fk_training_type}")
 	public void removeType(@PathVariable int fk_trainer_id,@PathVariable int fk_training_type){
-		DatabaseHelper.removeType(fk_trainer_id, fk_training_type);
+//		DatabaseHelper.removeType(fk_trainer_id, fk_training_type);
+		trainingTypeRepository.removeType(fk_trainer_id, fk_training_type);
 	}
 
 }
