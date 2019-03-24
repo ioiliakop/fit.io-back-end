@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="review")
 public class Review {
@@ -35,10 +37,9 @@ public class Review {
 	public Review() {
 	}
 
-	public Review(TrainingSession session, String comment, Date date) {
+	public Review(TrainingSession session, String comment) {
 		this.session = session;
 		this.comment = comment;
-		this.date = date;
 	}
 
 	public int getId() {

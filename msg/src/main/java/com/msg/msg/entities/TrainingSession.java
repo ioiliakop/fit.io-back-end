@@ -1,8 +1,5 @@
 package com.msg.msg.entities;
 
-import java.sql.Time;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,25 +35,23 @@ public class TrainingSession {
 
 	@Column(name = "date")
 	private String date;
-	
+
 	@Column(name = "time")
 	private String time;
-	
-	@Column(name = "comments")
-	private String comments;
+
+//	@Column(name = "comments")
+//	private String comments;
 
 	public TrainingSession() {
 	}
 
-	public TrainingSession(User client, User trainer, Area area, TrainingType trainingType, String date,
-			String time, String comments) {
+	public TrainingSession(User client, User trainer, Area area, TrainingType trainingType, String date, String time) {
 		this.client = client;
 		this.trainer = trainer;
 		this.area = area;
 		this.trainingType = trainingType;
 		this.date = date;
 		this.time = time;
-		this.comments = comments;
 	}
 
 	public int getId() {
@@ -115,23 +110,18 @@ public class TrainingSession {
 		this.time = time;
 	}
 
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-
 	@Override
 	public String toString() {
 		return "TrainingSession [id=" + id + ", client=" + client + ", trainer=" + trainer + ", area=" + area
-				+ ", trainingType=" + trainingType + ", date=" + date + ", time=" + time + ", comments=" + comments
-				+ "]";
+				+ ", trainingType=" + trainingType + ", date=" + date + ", time=" + time + "]";
 	}
 
-
-
-	
+//	public String getComments() {
+//		return comments;
+//	}
+//
+//	public void setComments(String comments) {
+//		this.comments = comments;
+//	}
 
 }

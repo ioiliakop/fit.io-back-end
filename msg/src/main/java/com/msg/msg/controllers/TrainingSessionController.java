@@ -44,20 +44,9 @@ public class TrainingSessionController {
 
 	@Autowired
 	public AreaRepository areaRepository;
-	
+
 	@Autowired
 	public ReviewRepository reviewRepository;
-
-//	@GetMapping("/trainer-sessions/{fk_trainer_id}")
-//	public List<TrainingSession> getTrainersSessions(@PathVariable int fk_trainer_id) {
-//		return trainingSessionRepository.findTrainersSessions(fk_trainer_id);
-//	}
-
-//	@GetMapping("/trainer-sessions/{trainerUsername}")
-//	public List<TrainingSession> getTrainersSessions(@PathVariable String trainerUsername) {
-//		User trainer= userRepository.findByUsername(trainerUsername);
-//		return trainingSessionRepository.findTrainersSessions(trainer.getId());
-//	}
 
 	@GetMapping("/trainer-sessions")
 	public List<TrainingSession> getTrainersSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
@@ -65,6 +54,57 @@ public class TrainingSessionController {
 		User trainer = userRepository.findById(id);
 		return trainingSessionRepository.findTrainersSessions(trainer.getId());
 	}
+
+	@GetMapping("/client-sessions")
+	public List<TrainingSession> getClientSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
+		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		User client = userRepository.findById(id);
+		return trainingSessionRepository.findUserSessions(client.getId());
+	}
+
+	@PostMapping("/book/{fk_trainer_id}/{idtraining_type}/{idarea}/{date}/{time}")
+	public void bookSession(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id,
+			@PathVariable int idtraining_type, @PathVariable int idarea, @PathVariable String date,
+			@PathVariable String time) {
+		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		User client = userRepository.findById(id);
+		User trainer = userRepository.findById(fk_trainer_id);
+		Area area = areaRepository.findById(idarea);
+		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
+		TrainingSession trainingSession = new TrainingSession(client, trainer, area, trainingType, date, time);
+		trainingSessionRepository.save(trainingSession);
+
+	}
+
+	@GetMapping("/review/{idtraining_session}")
+	public Review getSessionReview(@PathVariable int idtraining_session) {
+		return reviewRepository.getSessionComment(idtraining_session);
+	}
+	
+	@GetMapping("/review-trainer/{fk_trainer_id}")
+	public List<Review> getTrainerReview(@PathVariable int fk_trainer_id) {
+		return reviewRepository.getTrainerComments(fk_trainer_id);
+	}
+
+	@PostMapping("/add-comment/{idtraining_session}")
+	public void reviewSession(@PathVariable int idtraining_session, @RequestBody String comment) {
+		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
+		Review review = new Review(trainingSession, comment);
+		reviewRepository.save(review);
+	}
+
+//	@PutMapping("/update/{idtraining_session}") 
+//	public void addComment(@PathVariable int idtraining_session, @RequestBody String comments) {
+//		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
+//		trainingSession.setComments(comments);
+//		trainingSessionRepository.save(trainingSession);
+//		
+//	}
+//	
+//	@GetMapping("/comments/{fk_trainer_id}")
+//	public List<TrainingSession> getTrainersComments(@PathVariable int fk_trainer_id) {
+//		return trainingSessionRepository.trainersComments(fk_trainer_id);
+//	}
 
 //	@PostMapping("/trainer-sessions-cancel/{idtraining_session}")
 //	public void cancelSession(@PathVariable int idtraining_session) {
@@ -82,44 +122,15 @@ public class TrainingSessionController {
 //		return trainingSessionRepository.findUserSessions(client.getId());
 //	}
 
-	@GetMapping("/client-sessions")
-	public List<TrainingSession> getClientSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
-		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
-		User client = userRepository.findById(id);
-		return trainingSessionRepository.findUserSessions(client.getId());
-	}
-
-	@PostMapping("/book/{fk_trainer_id}/{idtraining_type}/{idarea}/{date}/{time}")
-	public void bookSession(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id,
-			@PathVariable int idtraining_type, @PathVariable int idarea, @PathVariable String date,
-			@PathVariable String time, @RequestBody String comments) {
-		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
-		User client = userRepository.findById(id);
-		User trainer = userRepository.findById(fk_trainer_id);
-		Area area = areaRepository.findById(idarea);
-		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
-		TrainingSession trainingSession = new TrainingSession(client, trainer, area, trainingType, date, time,
-				comments);
-		trainingSessionRepository.save(trainingSession);
-
-	}
-	
-//	@PutMapping("/update/{idtraining_session}") 
-//	public void addComment(@PathVariable int idtraining_session, @RequestBody String comments) {
-//		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
-//		trainingSession.setComments(comments);
-//		trainingSessionRepository.save(trainingSession);
-//		
+//	@GetMapping("/trainer-sessions/{fk_trainer_id}")
+//	public List<TrainingSession> getTrainersSessions(@PathVariable int fk_trainer_id) {
+//		return trainingSessionRepository.findTrainersSessions(fk_trainer_id);
 //	}
-//	
-//	@GetMapping("/comments/{fk_trainer_id}")
-//	public List<TrainingSession> getTrainersComments(@PathVariable int fk_trainer_id) {
-//		return trainingSessionRepository.trainersComments(fk_trainer_id);
+
+//	@GetMapping("/trainer-sessions/{trainerUsername}")
+//	public List<TrainingSession> getTrainersSessions(@PathVariable String trainerUsername) {
+//		User trainer= userRepository.findByUsername(trainerUsername);
+//		return trainingSessionRepository.findTrainersSessions(trainer.getId());
 //	}
-	
-	@GetMapping("/review/{idtraining_session}")
-	public Review getSessionReview(@PathVariable int idtraining_session) {
-		return reviewRepository.getSessionComment(idtraining_session);
-	}
 
 }
