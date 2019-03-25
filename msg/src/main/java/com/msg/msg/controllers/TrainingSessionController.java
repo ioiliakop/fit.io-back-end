@@ -86,9 +86,9 @@ public class TrainingSessionController {
 		return reviewRepository.getTrainerComments(fk_trainer_id);
 	}
 
-	@PostMapping("/add-comment/{fk_session_id}")
-	public void reviewSession(@PathVariable int fk_session_id, @RequestBody String comment) {
-		TrainingSession trainingSession = trainingSessionRepository.findById(fk_session_id);
+	@PostMapping("/add-comment/{idtraining_session}")
+	public void reviewSession(@PathVariable int idtraining_session, @RequestBody String comment) {
+		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
 		Review review = new Review(trainingSession, comment);
 		reviewRepository.save(review);
 	}
