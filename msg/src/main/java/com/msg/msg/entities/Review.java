@@ -40,6 +40,7 @@ public class Review {
 	public Review(TrainingSession session, String comment) {
 		this.session = session;
 		this.comment = comment;
+		this.date = new Date();
 	}
 
 	public int getId() {

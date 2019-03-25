@@ -86,51 +86,16 @@ public class TrainingSessionController {
 		return reviewRepository.getTrainerComments(fk_trainer_id);
 	}
 
-	@PostMapping("/add-comment/{idtraining_session}")
-	public void reviewSession(@PathVariable int idtraining_session, @RequestBody String comment) {
-		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
+	@PostMapping("/add-comment/{fk_session_id}")
+	public void reviewSession(@PathVariable int fk_session_id, @RequestBody String comment) {
+		TrainingSession trainingSession = trainingSessionRepository.findById(fk_session_id);
 		Review review = new Review(trainingSession, comment);
 		reviewRepository.save(review);
 	}
 
-//	@PutMapping("/update/{idtraining_session}") 
-//	public void addComment(@PathVariable int idtraining_session, @RequestBody String comments) {
-//		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
-//		trainingSession.setComments(comments);
-//		trainingSessionRepository.save(trainingSession);
-//		
-//	}
-//	
-//	@GetMapping("/comments/{fk_trainer_id}")
-//	public List<TrainingSession> getTrainersComments(@PathVariable int fk_trainer_id) {
-//		return trainingSessionRepository.trainersComments(fk_trainer_id);
-//	}
-
 //	@PostMapping("/trainer-sessions-cancel/{idtraining_session}")
 //	public void cancelSession(@PathVariable int idtraining_session) {
 //		DatabaseHelper.cancelSession(idtraining_session);
-//	}
-
-//	@GetMapping("/client-sessions/{fk_client_id}")
-//	public List<TrainingSession> getClientSessions(@PathVariable int fk_client_id) {
-//		return trainingSessionRepository.findUserSessions(fk_client_id);
-//	}
-
-//	@GetMapping("/client-sessions/{clientUsername}")
-//	public List<TrainingSession> getClientSessions(@PathVariable String clientUsername) {
-//		User client=userRepository.findByUsername(clientUsername);
-//		return trainingSessionRepository.findUserSessions(client.getId());
-//	}
-
-//	@GetMapping("/trainer-sessions/{fk_trainer_id}")
-//	public List<TrainingSession> getTrainersSessions(@PathVariable int fk_trainer_id) {
-//		return trainingSessionRepository.findTrainersSessions(fk_trainer_id);
-//	}
-
-//	@GetMapping("/trainer-sessions/{trainerUsername}")
-//	public List<TrainingSession> getTrainersSessions(@PathVariable String trainerUsername) {
-//		User trainer= userRepository.findByUsername(trainerUsername);
-//		return trainingSessionRepository.findTrainersSessions(trainer.getId());
 //	}
 
 }

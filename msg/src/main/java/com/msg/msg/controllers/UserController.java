@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.AreaRepository;
 import com.msg.msg.repositories.TrainingTypeRepository;
@@ -30,6 +29,7 @@ public class UserController {
 	@Autowired
 	public TrainingTypeRepository trainingTypeRepository;
 
+	
 	@GetMapping("/trainer/{specialization_title}/{city}")
 	public List<User> getYourTrainer(@PathVariable String specialization_title,@PathVariable String city) {
 		return userRepository.findTrainerByAreaAndType(specialization_title, city);
@@ -69,6 +69,8 @@ public class UserController {
 	public void chooseArea(@PathVariable int fk_trainer_id,@PathVariable int fk_area_id){
 //		DatabaseHelper.trainerArea(fk_trainer_id, fk_area_id);
 		areaRepository.addArea(fk_trainer_id, fk_area_id);
+
+		
 	}
 	
 	@PostMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
