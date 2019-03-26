@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.msg.msg.entities.TrainingType;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.AreaRepository;
 import com.msg.msg.repositories.TrainingTypeRepository;
@@ -90,5 +91,11 @@ public class UserController {
 //		DatabaseHelper.removeType(fk_trainer_id, fk_training_type);
 		trainingTypeRepository.removeType(fk_trainer_id, fk_training_type);
 	}
+	
+	@GetMapping("/trainer-types/{iduser}")
+	public List<TrainingType> getTrainersTypes(@PathVariable int iduser) {
+		return trainingTypeRepository.findTrainersTypes(iduser);
+	}
+	
 
 }

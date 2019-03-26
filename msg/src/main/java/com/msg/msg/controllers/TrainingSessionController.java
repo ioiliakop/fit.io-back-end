@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,7 +79,7 @@ public class TrainingSessionController {
 	public Review getSessionReview(@PathVariable int idtraining_session) {
 		return reviewRepository.getSessionComment(idtraining_session);
 	}
-	
+
 	@GetMapping("/review-trainer/{fk_trainer_id}")
 	public List<Review> getTrainerReview(@PathVariable int fk_trainer_id) {
 		return reviewRepository.getTrainerComments(fk_trainer_id);

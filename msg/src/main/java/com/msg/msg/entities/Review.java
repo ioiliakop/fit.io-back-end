@@ -12,27 +12,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name="review")
+@Table(name = "review")
 public class Review {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
-	 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_session_id", referencedColumnName = "idtraining_session")
-    private TrainingSession session;
- 
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "fk_session_id", referencedColumnName = "idtraining_session")
+	private TrainingSession session;
+
 	@Column(name = "comment")
 	private String comment;
-	
+
 	@Column(name = "date")
-	private Date date;//borei na ginei String
+	private Date date;// borei na ginei String
 
 	public Review() {
 	}
@@ -79,6 +76,5 @@ public class Review {
 	public String toString() {
 		return "Review [id=" + id + ", session=" + session + ", comment=" + comment + ", date=" + date + "]";
 	}
-	
-	
+
 }

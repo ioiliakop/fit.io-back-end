@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.encryption.CryptoConverter;
 import com.msg.msg.entities.Login;
 import com.msg.msg.entities.Token;
@@ -30,7 +29,6 @@ public class LoginController {
 	@Autowired
 	public TokenRepository tokenRepository;
 
-
 //	@PostMapping("/user")
 //	public Token loginUser(@RequestBody Login login) {
 //		String username = login.getUsername();
@@ -39,7 +37,7 @@ public class LoginController {
 //		Token token = DatabaseHelper.createToken(user);
 //		return token;
 //	}
-	
+
 	@PostMapping("/user")
 	public Token loginUser(@RequestBody Login login) {
 		String username = login.getUsername();
@@ -47,7 +45,7 @@ public class LoginController {
 		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
 		String alphanumeric = UUID.randomUUID().toString();
 //		tokenRepository.createToken(alphanumeric, user.getId());
-		Token token = new Token(alphanumeric,user);
+		Token token = new Token(alphanumeric, user);
 		tokenRepository.save(token);
 //		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		return token;
