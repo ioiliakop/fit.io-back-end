@@ -54,11 +54,27 @@ public class TrainingSessionController {
 		return trainingSessionRepository.findTrainersSessions(trainer.getId());
 	}
 
+	@GetMapping("/trainer-sessions-date/{date}")
+	public List<TrainingSession> getTrainersSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
+			@PathVariable String date) {
+		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		User trainer = userRepository.findById(id);
+		return trainingSessionRepository.findTrainersSessionsByDate(trainer.getId(), date);
+	}
+
 	@GetMapping("/client-sessions")
 	public List<TrainingSession> getClientSessions(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
 		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User client = userRepository.findById(id);
 		return trainingSessionRepository.findUserSessions(client.getId());
+	}
+
+	@GetMapping("/client-sessions-date/{date}")
+	public List<TrainingSession> getCientssSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
+			@PathVariable String date) {
+		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		User client = userRepository.findById(id);
+		return trainingSessionRepository.findUserSessionsBydate(client.getId(), date);
 	}
 
 	@PostMapping("/book/{fk_trainer_id}/{idtraining_type}/{idarea}/{date}/{time}")

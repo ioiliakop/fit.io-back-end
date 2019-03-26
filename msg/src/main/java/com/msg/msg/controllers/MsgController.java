@@ -37,11 +37,11 @@ public class MsgController {
 //		return messageRepository.findSentMessages(fk_sender_id);
 //	}
 
-	@GetMapping("/sent")
-	public List<Message> getSentMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
+	@GetMapping("/sent/{index1}/{index2}")
+	public List<Message> getSentMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int index1, @PathVariable int index2) {
 		int senderId=tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User sender=userRepository.findById(senderId);
-		return messageRepository.findSentMessages(sender.getId());
+		return messageRepository.findSentMessages(sender.getId(), index1, index2);
 	}
 	
 //	@GetMapping("/inbox/{fk_receiver_id}")	
@@ -49,11 +49,11 @@ public class MsgController {
 //		return messageRepository.findInboxMessages(fk_receiver_id);
 //	}
 	
-	@GetMapping("/inbox")	
-	public List<Message> getInboxMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric) {
+	@GetMapping("/inbox/{index1}/{index2}")	
+	public List<Message> getInboxMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int index1, @PathVariable int index2) {
 		int receiverId=tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User receiver=userRepository.findById(receiverId);
-		return messageRepository.findInboxMessages(receiver.getId());
+		return messageRepository.findInboxMessages(receiver.getId(), index1, index2);
 	}
 
 //	@GetMapping("/UsersMsg/{fk_sender_id}/{fk_receiver_id}")
@@ -61,12 +61,12 @@ public class MsgController {
 //		return messageRepository.findUserMessages(fk_receiver_id, fk_sender_id, fk_sender_id, fk_receiver_id);
 //	}
 	
-	@GetMapping("/UsersMsg/{receiverUsername}")
-	public List<Message> getUserMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric, @PathVariable String receiverUsername) {
+	@GetMapping("/UsersMsg/{receiverUsername}/{index1}/{index2}")
+	public List<Message> getUserMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric, @PathVariable String receiverUsername, @PathVariable int index1, @PathVariable int index2) {
 		int senderId=tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User sender=userRepository.findById(senderId);
 		User receiver=userRepository.findByUsername(receiverUsername);
-		return messageRepository.findUserMessages(receiver.getId(), sender.getId(), sender.getId(), receiver.getId());
+		return messageRepository.findUserMessages(receiver.getId(), sender.getId(), sender.getId(), receiver.getId(), index1, index2);
 	}
 	
 //	@PutMapping("/save/{fk_sender_id}/{fk_receiver_id}")
