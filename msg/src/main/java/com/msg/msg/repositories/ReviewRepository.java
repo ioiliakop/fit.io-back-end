@@ -4,9 +4,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.msg.msg.entities.Review;
 
+@CrossOrigin("*")
+@RepositoryRestResource
 public interface ReviewRepository extends JpaRepository<Review, Integer>{
 
 	@Query(value = "Select review.id, review.fk_session_id, review.comment, review.date from review,training_session "

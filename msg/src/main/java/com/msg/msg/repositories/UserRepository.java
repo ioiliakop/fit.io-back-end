@@ -4,9 +4,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.msg.msg.entities.User;
 
+@CrossOrigin("*")
+@RepositoryRestResource
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 //	@Query(value = "SELECT user.iduser,user.username,user.password,user.role,user.first_name,user.last_name,user.email,user.price,user.description FROM user,training_type,trainer_specialization,trainer_area,area"
