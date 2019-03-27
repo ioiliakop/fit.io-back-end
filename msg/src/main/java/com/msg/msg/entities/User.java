@@ -50,6 +50,9 @@ public class User implements Serializable {
 
 	@Column(name = "description")
 	private String description;
+	
+	@Column(name = "photo_link")
+	private String photoLink;
 
 	@OneToMany
 	@JoinColumn(name = "fk_sender_id", referencedColumnName = "iduser")
@@ -75,11 +78,12 @@ public class User implements Serializable {
 	@JsonIgnore
 	private List<Token> tokens;
 
+
 	public User() {
 	}
 
 	public User(int id, String username, String password, Role role, String firstName, String lastName, String email,
-			double price, String description) {
+			double price, String description, String photoLink) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -89,6 +93,7 @@ public class User implements Serializable {
 		this.email = email;
 		this.price = price;
 		this.description = description;
+		this.photoLink = photoLink;
 	}
 
 	public User(String username, String password, Role role, String firstName, String lastName, String email,
@@ -174,6 +179,15 @@ public class User implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	
+	public String getPhotoLink() {
+		return photoLink;
+	}
+
+	public void setPhotoLink(String photoLink) {
+		this.photoLink = photoLink;
 	}
 
 	public List<Message> getFromMsgs() {
