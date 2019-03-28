@@ -18,6 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>{
 	Review getSessionComment(int idtraining_session);
 	
 	@Query(value = "Select review.id, review.fk_session_id, review.comment, review.date from review,training_session,user "
-			+ "where review.fk_session_id = idtraining_session and iduser = ?1 limit ?2,?3", nativeQuery = true)
+			+ "where review.fk_session_id = idtraining_session and training_session.fk_trainer_id = user.iduser and user.iduser = ?1 limit ?2,?3", nativeQuery = true)
 	List<Review> getTrainerComments(int fk_trainer_id, int index1, int index2);
 }

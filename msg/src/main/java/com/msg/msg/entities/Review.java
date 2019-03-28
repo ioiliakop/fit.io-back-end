@@ -30,14 +30,18 @@ public class Review {
 
 	@Column(name = "date")
 	private Date date;// borei na ginei String
+	
+	@Column(name = "rating")
+	private int rating;
 
 	public Review() {
 	}
 
-	public Review(TrainingSession session, String comment) {
+	public Review(TrainingSession session, String comment, int rating) {
 		this.session = session;
 		this.comment = comment;
 		this.date = new Date();
+		this.rating = rating;
 	}
 
 	public int getId() {
@@ -72,9 +76,20 @@ public class Review {
 		this.date = date;
 	}
 
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
 	@Override
 	public String toString() {
-		return "Review [id=" + id + ", session=" + session + ", comment=" + comment + ", date=" + date + "]";
+		return "Review [id=" + id + ", session=" + session + ", comment=" + comment + ", date=" + date + ", rating="
+				+ rating + "]";
 	}
+
+
 
 }
