@@ -3,6 +3,7 @@ package com.msg.msg.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
@@ -31,6 +32,74 @@ public class DatabaseHelper {
 
 		return conn;
 	}
+	
+	public static int getSentMsgCount(int id) {
+	try (Connection conn = getConnection();
+			PreparedStatement ps = conn
+					.prepareStatement("select count(*) from tseam_six_3.message where fk_sender_id=?");) {
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		int count  = 0;
+		while(rs.next()) {
+			count = rs.getInt("count(*)");
+		}
+		return count;
+	} catch (Exception e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+}
+	
+	public static int getInboxMsgCount(int id) {
+	try (Connection conn = getConnection();
+			PreparedStatement ps = conn
+					.prepareStatement("select count(*) from tseam_six_3.message where fk_receiver_id=?");) {
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		int count  = 0;
+		if(rs.next()) {
+			count = rs.getInt("count(*)");
+		}
+		return count;
+	} catch (Exception e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+}
+	
+	public static int getUsersMsgCount(int senderId, int receiverId) {
+	try (Connection conn = getConnection();
+			PreparedStatement ps = conn
+					.prepareStatement("select count(*) from tseam_six_3.message where fk_receiver_id=? and fk_sender_id=? or fk_receiver_id=? and fk_sender_id=?");) {
+		ps.setInt(1, receiverId);
+		ps.setInt(2, senderId);
+		ps.setInt(3, senderId);
+		ps.setInt(4, receiverId);
+		ResultSet rs = ps.executeQuery();
+		int count  = 0;
+		if(rs.next()) {
+			count = rs.getInt("count(*)");
+		}
+		return count;
+	} catch (Exception e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+}
+	
+	public static int getTrainersReviews(int id) {
+	try (Connection conn = getConnection();
+			PreparedStatement ps = conn
+					.prepareStatement("Select count(*) from review,training_session,user "
+							+ "where review.fk_session_id = idtraining_session and iduser = ?");) {
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		int count  = 0;
+		if(rs.next()) {
+			count = rs.getInt("count(*)");
+		}
+		return count;
+	} catch (Exception e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+}
 
 //	public static Token createToken(User user) {
 //		try (Connection conn = getConnection();

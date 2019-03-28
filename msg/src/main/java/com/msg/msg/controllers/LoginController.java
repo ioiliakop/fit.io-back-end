@@ -43,12 +43,13 @@ public class LoginController {
 		String username = login.getUsername();
 		String password = login.getPassword();
 		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
-		String alphanumeric = UUID.randomUUID().toString();
-//		tokenRepository.createToken(alphanumeric, user.getId());
-		Token token = new Token(alphanumeric, user);
-		tokenRepository.save(token);
-//		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		return token;
+		if (user != null) {
+			String alphanumeric = UUID.randomUUID().toString();
+			Token token = new Token(alphanumeric, user);
+			tokenRepository.save(token);
+			return token;
+		} else
+			throw new RuntimeException("Invalid username or password");
 	}
 
 	@GetMapping("/userFromToken")
@@ -59,7 +60,6 @@ public class LoginController {
 
 	@PostMapping("/logout")
 	public void logout(@RequestHeader("X-MSG-AUTH") String alphanumeric) {
-//		DatabaseHelper.logOutUser(alphanumeric);
 		tokenRepository.deleteByAlphanumeric(alphanumeric);
 	}
 }
