@@ -104,13 +104,13 @@ public class TrainingSessionController {
 		return new Result(count, reviews);
 	}
 
-	@PostMapping("/add-comment/{idtraining_session}")
+	@PostMapping("/add-comment/{idtraining_session}/{rating}")
 	public void reviewSession(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
-			@PathVariable int idtraining_session, @RequestBody String comment) {
+			@PathVariable int idtraining_session,@PathVariable int rating, @RequestBody String comment) {
 		Token token = tokenRepository.findByAlphanumeric(tokenAlphanumeric);
 		if (token != null) {
 			TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
-			Review review = new Review(trainingSession, comment);
+			Review review = new Review(trainingSession, comment, rating);
 			reviewRepository.save(review);
 		} else {
 			throw new RuntimeException("Unauthorized action");
