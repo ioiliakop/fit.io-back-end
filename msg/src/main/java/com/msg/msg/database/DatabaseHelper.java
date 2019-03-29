@@ -22,7 +22,7 @@ public class DatabaseHelper {
 		try {
 			Properties connectionProps = new Properties();
 			connectionProps.put("user", "root");
-			connectionProps.put("password", "konnos1987");
+			connectionProps.put("password", "");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/tseam_six_3?zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true",
 					connectionProps);
@@ -40,7 +40,7 @@ public class DatabaseHelper {
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		int count  = 0;
-		while(rs.next()) {
+		if(rs.next()) {
 			count = rs.getInt("count(*)");
 		}
 		return count;
