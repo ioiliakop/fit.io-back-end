@@ -50,6 +50,7 @@ public class RegisterController {
 		User user = userRepository.findById(iduser);
 		User.validateUser(user);
 		user.setActiveStatus(1);
+		userRepository.save(user);
 	}
 	
 //
