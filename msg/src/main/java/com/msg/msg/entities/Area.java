@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -24,10 +27,10 @@ public class Area {
 
 	@Column(name = "city")
 	private String city;
-	
+
 	@Column(name = "address")
 	private String address;
-	
+
 	@OneToMany
 	@JoinColumn(name = "fk_area_id", referencedColumnName = "idarea")
 	@JsonIgnore
@@ -72,6 +75,12 @@ public class Area {
 
 	public void setAreaSessions(List<TrainingSession> areaSessions) {
 		this.areaSessions = areaSessions;
+	}
+
+	public static void validateArea(Area area) {
+		if (area == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Area Not Found");
+		}
 	}
 
 	@Override

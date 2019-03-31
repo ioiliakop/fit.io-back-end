@@ -13,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -50,9 +53,12 @@ public class User implements Serializable {
 
 	@Column(name = "description")
 	private String description;
-	
+
 	@Column(name = "photo_link")
 	private String photoLink;
+
+	@Column(name = "is_active")
+	private int activeStatus;
 
 	@OneToMany
 	@JoinColumn(name = "fk_sender_id", referencedColumnName = "iduser")
@@ -78,23 +84,22 @@ public class User implements Serializable {
 	@JsonIgnore
 	private List<Token> tokens;
 
-
 	public User() {
 	}
 
-	public User(int id, String username, String password, Role role, String firstName, String lastName, String email,
-			double price, String description, String photoLink) {
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.role = role;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.price = price;
-		this.description = description;
-		this.photoLink = photoLink;
-	}
+//	public User(int id, String username, String password, Role role, String firstName, String lastName, String email,
+//			double price, String description, String photoLink) {
+//		this.id = id;
+//		this.username = username;
+//		this.password = password;
+//		this.role = role;
+//		this.firstName = firstName;
+//		this.lastName = lastName;
+//		this.email = email;
+//		this.price = price;
+//		this.description = description;
+//		this.photoLink = photoLink;
+//	}
 
 	public User(String username, String password, Role role, String firstName, String lastName, String email,
 			double price, String description) {
@@ -131,7 +136,6 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 
 	public Role getRole() {
 		return role;
@@ -181,13 +185,24 @@ public class User implements Serializable {
 		this.description = description;
 	}
 
-	
 	public String getPhotoLink() {
 		return photoLink;
 	}
 
 	public void setPhotoLink(String photoLink) {
 		this.photoLink = photoLink;
+	}
+
+	public int getActiveStatus() {
+		return activeStatus;
+	}
+
+	public void setActiveStatus(int activeStatus) {
+		this.activeStatus = activeStatus;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	public List<Message> getFromMsgs() {
@@ -230,13 +245,17 @@ public class User implements Serializable {
 		this.tokens = tokens;
 	}
 
+	public static void validateUser(User user) {
+		if (user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found");
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", role=" + role + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", email=" + email + ", price=" + price + ", description=" + description
 				+ "]";
 	}
-
-
 
 }

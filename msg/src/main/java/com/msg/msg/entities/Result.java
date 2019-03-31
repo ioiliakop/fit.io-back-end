@@ -2,16 +2,19 @@ package com.msg.msg.entities;
 
 import java.util.List;
 
-public class Result {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+public class Result<T> {
 
 	private int count;
 
-	private List<?> results;
+	private List<T> results;
 
 	public Result() {
 	}
 
-	public Result(int count, List<?> results) {
+	public Result(int count, List<T> results) {
 		this.count = count;
 		this.results = results;
 	}
@@ -24,12 +27,19 @@ public class Result {
 		this.count = count;
 	}
 
-	public List<?> getResults() {
+	public List<T> getResults() {
 		return results;
 	}
 
-	public void setResults(List<?> results) {
+	public void setResults(List<T> results) {
 		this.results = results;
+	}
+	
+	public static void validateIndexes(int index1, int index2) {
+		if((index1<0)||(index2<0)||(index2-index1>100)||(index2-index1<0)){
+			throw new ResponseStatusException(
+			           HttpStatus.BAD_REQUEST, "Invalid index");
+		}
 	}
 
 	@Override

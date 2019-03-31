@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 @Entity
 @Table(name = "training_session")
 public class TrainingSession {
@@ -38,6 +41,12 @@ public class TrainingSession {
 
 	@Column(name = "time")
 	private String time;
+
+	@Column(name = "is_read")
+	private int notificationStatus;
+
+	@Column(name = "is_canceled")
+	private int cancelationStatus;
 
 //	@Column(name = "comments")
 //	private String comments;
@@ -110,18 +119,32 @@ public class TrainingSession {
 		this.time = time;
 	}
 
+	public int getNotificationStatus() {
+		return notificationStatus;
+	}
+
+	public void setNotificationStatus(int notificationStatus) {
+		this.notificationStatus = notificationStatus;
+	}
+
+	public int getCancelationStatus() {
+		return cancelationStatus;
+	}
+
+	public void setCancelationStatus(int cancelationStatus) {
+		this.cancelationStatus = cancelationStatus;
+	}
+
+	public static void validateTrainingSession(TrainingSession trainingSession) {
+		if (trainingSession == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Training Session Not Found");
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "TrainingSession [id=" + id + ", client=" + client + ", trainer=" + trainer + ", area=" + area
 				+ ", trainingType=" + trainingType + ", date=" + date + ", time=" + time + "]";
 	}
-
-//	public String getComments() {
-//		return comments;
-//	}
-//
-//	public void setComments(String comments) {
-//		this.comments = comments;
-//	}
 
 }
