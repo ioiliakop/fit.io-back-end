@@ -20,7 +20,7 @@ import com.msg.msg.repositories.UserRepository;
 @RequestMapping("/register")
 @CrossOrigin(origins = "*")
 public class RegisterController {
-	
+
 	@Autowired
 	public UserRepository userRepository;
 
@@ -31,20 +31,17 @@ public class RegisterController {
 	public void registerUser(@RequestBody User user) throws MailException {
 		User user2 = userRepository.findByUsername(user.getUsername());
 		if (user2 == null) {
-//			byte[] salt = CryptoConverter.createSalt();
 			String password = user.retrievePassword();
-//			user.setPassword(CryptoConverter.generateHash(password, "SHA-256", salt));
-//			String salt = BCrypt.gensalt(12);
-//			String hashed_password = BCrypt.hashpw(password, salt);
-//			user.setPassword(hashed_password);
-			user.setPassword(CryptoConverter.encrypt(password));
+			String email = user.getEmail();
+			String salt = password + email;
+			user.setPassword(CryptoConverter.encrypt(salt));
 			userRepository.save(user);
-			mailService.sendMail(user);
+//			mailService.sendMail(user);
 		} else {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username Already Exists");
 		}
 	}
-	
+
 	@PostMapping("/confirmed/{iduser}")
 	public void enableAcount(@PathVariable int iduser) {
 		User user = userRepository.findById(iduser);
@@ -52,6 +49,5 @@ public class RegisterController {
 		user.setActiveStatus(1);
 		userRepository.save(user);
 	}
-	
-//
+
 }

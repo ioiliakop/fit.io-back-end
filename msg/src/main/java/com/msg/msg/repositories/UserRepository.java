@@ -61,7 +61,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 //    void unBannUser(@Param("userId") int iduser);
 	
 	
-
 	User findById(int id);
 
 	User findByUsername(String username);

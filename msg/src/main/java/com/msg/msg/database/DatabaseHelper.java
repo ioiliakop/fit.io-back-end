@@ -6,10 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.UUID;
 
-import com.msg.msg.entities.Token;
-import com.msg.msg.entities.User;
 
 public class DatabaseHelper {
 

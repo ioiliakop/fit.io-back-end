@@ -44,14 +44,18 @@ public class LoginController {
 	public Token loginUser(@RequestBody Login login) {
 		String username = login.getUsername();
 		String password = login.getPassword();
-		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
+		User user1 = userRepository.findByUsername(username);
+		User.validateUser(user1);
+		String email = user1.getEmail();
+		String salt = password + email;
+		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(salt));
 		if (user != null) {
 			String alphanumeric = UUID.randomUUID().toString();
 			Token token = new Token(alphanumeric, user);
 			tokenRepository.save(token);
 			return token;
 		} else {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Username/Password");
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Username/Password");
 		}
 	}
 
