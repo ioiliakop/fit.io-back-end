@@ -1,6 +1,5 @@
 package com.msg.msg.entities;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,9 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
-public class User implements Serializable {
-
-	private static final long serialVersionUID = -6440695620165525838L;
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -200,7 +197,7 @@ public class User implements Serializable {
 	public void setActiveStatus(int activeStatus) {
 		this.activeStatus = activeStatus;
 	}
-	
+
 	public List<Message> getFromMsgs() {
 		return fromMsgs;
 	}

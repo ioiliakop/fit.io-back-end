@@ -74,7 +74,7 @@ public class UserController {
 	}
 
 	@PostMapping("set-price/{iduser}/{price}")
-	public void setPrice(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int iduser,
+	public void setPrice(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int iduser,
 			@PathVariable double price) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
@@ -83,16 +83,15 @@ public class UserController {
 	}
 
 	@PostMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")
-	public void chooseArea(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
+	public void chooseArea(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
 			@PathVariable int fk_area_id) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
 		areaRepository.addArea(fk_trainer_id, fk_area_id);
-
 	}
 
 	@PostMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
-	public void trainerSpecialization(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public void trainerSpecialization(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable int fk_trainer_id, @PathVariable int fk_training_type) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
@@ -100,7 +99,7 @@ public class UserController {
 	}
 
 	@PostMapping("trainer-remove-area/{fk_trainer_id}/{fk_area_id}")
-	public void removeArea(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
+	public void removeArea(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
 			@PathVariable int fk_area_id) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
@@ -108,7 +107,7 @@ public class UserController {
 	}
 
 	@PostMapping("trainer-remove-type/{fk_trainer_id}/{fk_training_type}")
-	public void removeType(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
+	public void removeType(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
 			@PathVariable int fk_training_type) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
@@ -116,26 +115,23 @@ public class UserController {
 	}
 
 	@PostMapping("bann-user/{iduser}")
-	public void bannUser(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int iduser) {
+	public void bannUser(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int iduser) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
 		User user = userRepository.findById(iduser);
 		User.validateUser(user);
 		user.setActiveStatus(0);
 		userRepository.save(user);
-
 	}
 
 	@PostMapping("unbann-user/{iduser}")
-	public void unBannUser(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int iduser) {
+	public void unBannUser(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int iduser) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
 		User user = userRepository.findById(iduser);
 		User.validateUser(user);
 		user.setActiveStatus(1);
 		userRepository.save(user);
-		;
-
 	}
 
 	@GetMapping("/trainers-types/{iduser}")

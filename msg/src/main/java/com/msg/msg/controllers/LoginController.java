@@ -45,7 +45,6 @@ public class LoginController {
 		String username = login.getUsername();
 		String password = login.getPassword();
 		User user1 = userRepository.findByUsername(username);
-		User.validateUser(user1);
 		String email = user1.getEmail();
 		String salt = password + email;
 		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(salt));

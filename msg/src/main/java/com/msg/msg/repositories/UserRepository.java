@@ -16,36 +16,37 @@ import com.msg.msg.entities.User;
 @RepositoryRestResource
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	@Query(value = "select user.iduser, user.username,user.password,user.fk_role_id, user.first_name,user.last_name,user.email,user.price,user.description\r\n"
-			+ " user.photo_link, user.is_active from user, trainer_area,  trainer_specialization, area ,training_type\r\n"
-			+ "where user.iduser=trainer_specialization.fk_trainer_id and user.iduser=trainer_area.fk_trainer_id and \r\n"
-			+ "training_type.idtraining_type=trainer_specialization.fk_training_type and area.idarea=trainer_area.fk_area_id\r\n"
-			+ "and training_type.specialization_title= ?1 and area.city= ?2", nativeQuery = true)
+	@Query(value = "SELECT user.iduser, user.username,user.password,user.fk_role_id, user.first_name,user.last_name,user.email,user.price,user.description\r\n"
+			+ ",user.photo_link, user.is_active FROM user, trainer_area,  trainer_specialization, area ,training_type\r\n"
+			+ "WHERE user.iduser=trainer_specialization.fk_trainer_id AND user.iduser=trainer_area.fk_trainer_id AND \r\n"
+			+ "training_type.idtraining_type=trainer_specialization.fk_training_type AND area.idarea=trainer_area.fk_area_id\r\n"
+			+ "AND training_type.specialization_title= ?1 AND area.city= ?2", nativeQuery = true)
 	List<User> findTrainerByAreaAndType(String specialization_title, String city);
 
 	@Query(value = "SELECT user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active"
 			+ " FROM user,training_type,trainer_specialization,trainer_area,area"
-			+ " where user.iduser=trainer_specialization.fk_trainer_id and trainer_specialization.fk_training_type = training_type.idtraining_type and "
-			+ "user.iduser=trainer_area.fk_trainer_id and trainer_area.fk_area_id=area.idarea and specialization_title = ?1 and"
-			+ " city= ?2 and price <=?3", nativeQuery = true)
+			+ " WHERE user.iduser=trainer_specialization.fk_trainer_id AND trainer_specialization.fk_training_type = training_type.idtraining_type AND "
+			+ "user.iduser=trainer_area.fk_trainer_id AND trainer_area.fk_area_id=area.idarea AND specialization_title = ?1 AND"
+			+ " city= ?2 AND price <=?3", nativeQuery = true)
 	List<User> findTrainerByAreaAndTypeAndPrice(String specialization_title, String city, double price);
 
-	@Query(value = "Select user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active"
-			+ " from user,trainer_area,area where iduser=fk_trainer_id and fk_area_id=idarea and idarea=?1", nativeQuery = true)
+	@Query(value = "SELECT user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active"
+			+ " FROM user,trainer_area,area WHERE iduser=fk_trainer_id AND fk_area_id=idarea AND idarea=?1", nativeQuery = true)
 	List<User> findTrainerByArea(int idarea);
 
-	@Query(value = "Select user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active"
-			+ " from user,trainer_area,area where iduser=fk_trainer_id and fk_area_id=idarea and idarea=?1 and price <=?2", nativeQuery = true)
+	@Query(value = "SELECT user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active"
+			+ " FROM user,trainer_area,area WHERE iduser=fk_trainer_id AND fk_area_id=idarea AND idarea=?1 and price <=?2", nativeQuery = true)
 	List<User> findTrainerByAreaAndPrice(int idarea, double price);
 
-	@Query(value = "Select user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active "
-			+ "from user,trainer_specialization,training_type where iduser=fk_trainer_id and fk_training_type=idtraining_type and idtraining_type =?1", nativeQuery = true)
+	@Query(value = "SELECT user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active "
+			+ "FROM user,trainer_specialization,training_type WHERE iduser=fk_trainer_id AND fk_training_type=idtraining_type AND idtraining_type =?1", nativeQuery = true)
 	List<User> findByTrainingType(int idtraining_type);
 
-	@Query(value = "Select user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active from user,trainer_specialization,training_type where iduser=fk_trainer_id and fk_training_type=idtraining_type and idtraining_type =?1 and price <=?2", nativeQuery = true)
+	@Query(value = "SELECT user.iduser,user.username,user.password,user.fk_role_id,user.first_name,user.last_name,user.email,user.price,user.description,user.photo_link,user.is_active "
+			+ "FROM user,trainer_specialization,training_type WHERE iduser=fk_trainer_id AND fk_training_type=idtraining_type AND idtraining_type =?1 AND price <=?2", nativeQuery = true)
 	List<User> findTrainerByTypeAndPrice(int idtraining_type, double price);
 
-	@Query(value = "Select * from user where price > 0.0 and price <= ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM user WHERE price > 0.0 AND price <= ?1", nativeQuery = true)
 	List<User> findTrainerByPrice(double price);
 
 	User findById(int id);
