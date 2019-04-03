@@ -56,6 +56,9 @@ public class User {
 
 	@Column(name = "is_active")
 	private int activeStatus;
+	
+	@Column(name = "random_num")
+	private String randomNum;
 
 	@OneToMany
 	@JoinColumn(name = "fk_sender_id", referencedColumnName = "iduser")
@@ -196,6 +199,14 @@ public class User {
 
 	public void setActiveStatus(int activeStatus) {
 		this.activeStatus = activeStatus;
+	}
+	
+	public String getRandomNum() {
+		return randomNum;
+	}
+
+	public void setRandomNum(String randomNum) {
+		this.randomNum = randomNum;
 	}
 
 	public List<Message> getFromMsgs() {
