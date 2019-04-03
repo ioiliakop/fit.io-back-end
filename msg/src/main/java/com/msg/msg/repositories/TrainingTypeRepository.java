@@ -17,6 +17,8 @@ import com.msg.msg.entities.TrainingType;
 public interface TrainingTypeRepository extends JpaRepository<TrainingType, Integer> {
 
 	TrainingType findById(int id);
+	
+	List<TrainingType> findAll();
 
 	@Modifying
 	@Query(value = "INSERT INTO trainer_specialization (fk_trainer_id, fk_training_type) VALUES (:trainerId,:typeId)", nativeQuery = true)

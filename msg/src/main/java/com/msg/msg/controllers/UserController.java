@@ -80,6 +80,7 @@ public class UserController {
 		Token.validateToken(token);
 		User user = userRepository.findById(iduser);
 		user.setPrice(price);
+		userRepository.save(user);
 	}
 
 	@PostMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")

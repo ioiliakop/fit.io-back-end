@@ -18,6 +18,8 @@ public interface AreaRepository extends JpaRepository<Area, Integer>{
 
 	Area findById(int id);
 	
+	List<Area> findAll();
+	
 	@Modifying
     @Query(value = "INSERT INTO trainer_area (fk_trainer_id, fk_area_id) VALUES (:trainerId,:areaId)", nativeQuery = true)
     @Transactional
