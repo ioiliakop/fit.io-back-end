@@ -2,6 +2,7 @@ package com.msg.msg.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,8 @@ import com.msg.msg.entities.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	List<User> findByTrainerAreasAndTrainerTypes(Area area, TrainingType trainingType);
+			
+	List<User> findByTrainerAreasAndTrainerTypes(Area area, TrainingType trainingType,  Pageable pageable);
 
 	List<User> findByTrainerAreasAndTrainerTypesAndPriceLessThanEqual(Area area, TrainingType trainingType, double price);
 

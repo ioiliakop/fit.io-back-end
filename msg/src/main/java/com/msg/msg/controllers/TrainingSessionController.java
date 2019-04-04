@@ -59,13 +59,14 @@ public class TrainingSessionController {
 		return trainingSessionRepository.findTrainersSessions(id);
 	}
 
-//	@GetMapping("/trainer-sessions-date/{date}") maybe
-//	public List<TrainingSession> getTrainersSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
-//			@PathVariable String date) {
-//		Token.validateToken(tokenAlphanumeric, tokenRepository);
-//		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
-//		return trainingSessionRepository.findTrainersSessionsByDate(id, date);
-//	}
+	@GetMapping("/trainer-sessions-date/{date}") 
+	public List<TrainingSession> getTrainersSessionsByDate(@RequestHeader("X-MSG-AUTH") String alphanumeric,
+			@PathVariable String date) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
+		int id = token.getUser().getId();
+		return trainingSessionRepository.findTrainersSessionsByDate(id, date);
+	}
 
 	@GetMapping("/client-sessions")
 	public List<TrainingSession> getClientSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
@@ -75,13 +76,14 @@ public class TrainingSessionController {
 		return trainingSessionRepository.findUserSessions(id);
 	}
 
-//	@GetMapping("/client-sessions-date/{date}") maybe
-//	public List<TrainingSession> getCientssSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
-//			@PathVariable String date) {
-//		Token.validateToken(tokenAlphanumeric, tokenRepository);
-//		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
-//		return trainingSessionRepository.findUserSessionsBydate(id, date);
-//	}
+	@GetMapping("/client-sessions-date/{date}")
+	public List<TrainingSession> getCientssSessionsByDate(@RequestHeader("X-MSG-AUTH") String alphanumeric,
+			@PathVariable String date) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
+		int id = token.getUser().getId();
+		return trainingSessionRepository.findUserSessionsBydate(id, date);
+	}
 
 	@PostMapping("/book/{fk_trainer_id}/{idtraining_type}/{idarea}/{date}/{time}")
 	public void bookSession(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
