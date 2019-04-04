@@ -30,15 +30,6 @@ public class LoginController {
 	@Autowired
 	public TokenRepository tokenRepository;
 
-//	@PostMapping("/user")
-//	public Token loginUser(@RequestBody Login login) {
-//		String username = login.getUsername();
-//		String password = login.getPassword();
-//		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
-//		Token token = DatabaseHelper.createToken(user);
-//		return token;
-//	}
-
 	@PostMapping("/user")
 	public Token loginUser(@RequestBody Login login) {
 		String username = login.getUsername();

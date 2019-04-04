@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.msg.entities.Area;
+import com.msg.msg.entities.Role;
 import com.msg.msg.entities.Token;
 import com.msg.msg.entities.TrainingType;
 import com.msg.msg.entities.User;
@@ -49,7 +51,11 @@ public class UserController {
 	@GetMapping("/trainer/{idarea}/{idtraining_type}/{price}")
 	public List<User> getYourTrainer(@PathVariable int idarea, @PathVariable int idtraining_type,
 			@PathVariable double price) {
-		return userRepository.findTrainerByAreaAndTypeAndPrice(idarea, idtraining_type, price);
+		Area area = areaRepository.findById(idarea);
+		Area.validateArea(area);
+		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
+		TrainingType.validateTrainingType(trainingType);
+		return userRepository.findByTrainerAreasAndTrainerTypesAndPriceLessThanEqual(area, trainingType, price);
 	}
 
 	@GetMapping("trainers-area/{idarea}")
@@ -61,7 +67,19 @@ public class UserController {
 
 	@GetMapping("trainer-area-price/{idarea}/{price}")
 	public List<User> getTrainerByAreaAndPrice(@PathVariable int idarea, @PathVariable double price) {
-		return userRepository.findTrainerByAreaAndPrice(idarea, price);
+		Area area = areaRepository.findById(idarea);
+		Area.validateArea(area);
+		return userRepository.findByTrainerAreasAndPriceLessThanEqual(area, price);
+	}
+	
+	@GetMapping("byPrice/{priceMin}/{priceMax}")
+	public List<User> getTrainerByPrice(@PathVariable double priceMin, @PathVariable double priceMax) {
+		return userRepository.findByPriceBetween(priceMin, priceMax);
+	}
+	
+	@GetMapping("all-trainers")
+	public List<User> getAllTrainers(@RequestBody Role role){
+		return userRepository.findByRole(role);
 	}
 
 	@GetMapping("trainer-type/{idtraining_type}")
@@ -73,13 +91,15 @@ public class UserController {
 
 	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
 	public List<User> getTrainerByTypeAndPrice(@PathVariable int idtraining_type, @PathVariable double price) {
-		return userRepository.findTrainerByTypeAndPrice(idtraining_type, price);
+		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
+		TrainingType.validateTrainingType(trainingType);
+		return userRepository.findByTrainerTypesAndPriceLessThanEqual(trainingType, price);
 	}
 
-	@GetMapping("trainer-price/{price}")
-	public List<User> getTrainerByPrice(@PathVariable double price) {
-		return userRepository.findTrainerByPrice(price);
-	}
+//	@GetMapping("trainer-price/{price}")
+//	public List<User> getTrainerByPrice(@PathVariable double price) {
+//		return userRepository.findTrainerByPrice(price);
+//	}
 
 	@PostMapping("set-price/{iduser}/{price}")
 	public void setPrice(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int iduser,
