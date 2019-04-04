@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.msg.msg.entities.Message;
 
-@CrossOrigin("*")
-@RepositoryRestResource
+@Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
 
 	@Query(value="SELECT * FROM tseam_six_3.message WHERE fk_sender_id=?1 ORDER BY time_sent DESC LIMIT ?2,?3", nativeQuery = true)

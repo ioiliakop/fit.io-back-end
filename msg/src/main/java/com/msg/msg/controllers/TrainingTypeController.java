@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.msg.entities.TrainingType;
+import com.msg.msg.entities.User;
 import com.msg.msg.repositories.TrainingTypeRepository;
+import com.msg.msg.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/types")
@@ -18,9 +21,19 @@ public class TrainingTypeController {
 	@Autowired
 	public TrainingTypeRepository trainingTypeRepository;
 	
+	@Autowired
+	public UserRepository userRepository;
+	
 	@GetMapping("/all")
 	public List<TrainingType> getAllTypes(){
 		return trainingTypeRepository.findAll();
+	}
+	
+	@GetMapping("/trainer-types/{iduser}")
+	public List<TrainingType> getTrainersTypes(@PathVariable int iduser) {
+		User user = userRepository.findById(iduser);
+		User.validateUser(user);
+		return trainingTypeRepository.findByTrainers(user);
 	}
 
 }

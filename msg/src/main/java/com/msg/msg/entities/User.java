@@ -1,6 +1,7 @@
 package com.msg.msg.entities;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -56,9 +59,12 @@ public class User {
 
 	@Column(name = "is_active")
 	private int activeStatus;
-	
+
 	@Column(name = "random_num")
 	private String randomNum;
+
+	@Column(name = "address")
+	private String address;
 
 	@OneToMany
 	@JoinColumn(name = "fk_sender_id", referencedColumnName = "iduser")
@@ -84,6 +90,16 @@ public class User {
 	@JsonIgnore
 	private List<Token> tokens;
 
+	@ManyToMany
+	@JoinTable(name = "trainer_area", joinColumns = @JoinColumn(name = "fk_trainer_id"), inverseJoinColumns = @JoinColumn(name = "fk_area_id"))
+	@JsonIgnore
+	List<Area> trainerAreas;
+
+	@ManyToMany
+	@JoinTable(name = "trainer_specialization", joinColumns = @JoinColumn(name = "fk_trainer_id"), inverseJoinColumns = @JoinColumn(name = "fk_training_type"))
+	@JsonIgnore
+	List<TrainingType> trainerTypes;
+
 	public User() {
 	}
 
@@ -102,7 +118,7 @@ public class User {
 //	}
 
 	public User(String username, String password, Role role, String firstName, String lastName, String email,
-			double price, String description) {
+			double price, String description, String address) {
 		this.username = username;
 		this.password = password;
 		this.role = role;
@@ -111,6 +127,7 @@ public class User {
 		this.email = email;
 		this.price = price;
 		this.description = description;
+		this.address = address;
 	}
 
 	public int getId() {
@@ -200,7 +217,7 @@ public class User {
 	public void setActiveStatus(int activeStatus) {
 		this.activeStatus = activeStatus;
 	}
-	
+
 	public String getRandomNum() {
 		return randomNum;
 	}
@@ -209,45 +226,60 @@ public class User {
 		this.randomNum = randomNum;
 	}
 
-	public List<Message> getFromMsgs() {
-		return fromMsgs;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setFromMsgs(List<Message> fromMsgs) {
-		this.fromMsgs = fromMsgs;
+	public void setAddress(String address) {
+		this.address = address;
 	}
-
-	public List<Message> getToMsgs() {
-		return toMsgs;
-	}
-
-	public void setToMsgs(List<Message> toMsgs) {
-		this.toMsgs = toMsgs;
-	}
-
-	public List<TrainingSession> getClientSessions() {
-		return clientSessions;
-	}
-
-	public void setClientSessions(List<TrainingSession> clientSessions) {
-		this.clientSessions = clientSessions;
-	}
-
-	public List<TrainingSession> getTrainerSessions() {
-		return trainerSessions;
-	}
-
-	public void setTrainerSessions(List<TrainingSession> trainerSessions) {
-		this.trainerSessions = trainerSessions;
-	}
-
-	public List<Token> getTokens() {
-		return tokens;
-	}
-
-	public void setTokens(List<Token> tokens) {
-		this.tokens = tokens;
-	}
+//	public List<Message> getFromMsgs() {
+//		return fromMsgs;
+//	}
+//
+//	public void setFromMsgs(List<Message> fromMsgs) {
+//		this.fromMsgs = fromMsgs;
+//	}
+//
+//	public List<Message> getToMsgs() {
+//		return toMsgs;
+//	}
+//
+//	public void setToMsgs(List<Message> toMsgs) {
+//		this.toMsgs = toMsgs;
+//	}
+//
+//	public List<TrainingSession> getClientSessions() {
+//		return clientSessions;
+//	}
+//
+//	public void setClientSessions(List<TrainingSession> clientSessions) {
+//		this.clientSessions = clientSessions;
+//	}
+//
+//	public List<TrainingSession> getTrainerSessions() {
+//		return trainerSessions;
+//	}
+//
+//	public void setTrainerSessions(List<TrainingSession> trainerSessions) {
+//		this.trainerSessions = trainerSessions;
+//	}
+//
+//	public List<Token> getTokens() {
+//		return tokens;
+//	}
+//
+//	public void setTokens(List<Token> tokens) {
+//		this.tokens = tokens;
+//	}
+//
+//	public List<Area> getTrainerAreas() {
+//		return trainerAreas;
+//	}
+//
+//	public void setTrainerAreas(List<Area> trainerAreas) {
+//		this.trainerAreas = trainerAreas;
+//	}
 
 	public static void validateUser(User user) {
 		if (user == null) {

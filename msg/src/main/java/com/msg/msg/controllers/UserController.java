@@ -37,20 +37,26 @@ public class UserController {
 	@Autowired
 	TokenRepository tokenRepository;
 
-	@GetMapping("/trainer/{specialization_title}/{city}")
-	public List<User> getYourTrainer(@PathVariable String specialization_title, @PathVariable String city) {
-		return userRepository.findTrainerByAreaAndType(specialization_title, city);
+	@GetMapping("/trainer/{idtraining_type}/{idarea}")
+	public List<User> getYourTrainer(@PathVariable int idtraining_type, @PathVariable int idarea) {
+		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
+		TrainingType.validateTrainingType(trainingType);
+		Area area = areaRepository.findById(idarea);
+		Area.validateArea(area);
+		return userRepository.findByTrainerAreasAndTrainerTypes(area, trainingType);
 	}
 
-	@GetMapping("/trainer/{specialization_title}/{city}/{price}")
-	public List<User> getYourTrainer(@PathVariable String specialization_title, @PathVariable String city,
+	@GetMapping("/trainer/{idarea}/{idtraining_type}/{price}")
+	public List<User> getYourTrainer(@PathVariable int idarea, @PathVariable int idtraining_type,
 			@PathVariable double price) {
-		return userRepository.findTrainerByAreaAndTypeAndPrice(specialization_title, city, price);
+		return userRepository.findTrainerByAreaAndTypeAndPrice(idarea, idtraining_type, price);
 	}
 
-	@GetMapping("trainer-area/{idarea}")
+	@GetMapping("trainers-area/{idarea}")
 	public List<User> getTrainerByArea(@PathVariable int idarea) {
-		return userRepository.findTrainerByArea(idarea);
+		Area area = areaRepository.findById(idarea);
+		Area.validateArea(area);
+		return userRepository.findByTrainerAreas(area);
 	}
 
 	@GetMapping("trainer-area-price/{idarea}/{price}")
@@ -60,7 +66,9 @@ public class UserController {
 
 	@GetMapping("trainer-type/{idtraining_type}")
 	public List<User> getTrainerByType(@PathVariable int idtraining_type) {
-		return userRepository.findByTrainingType(idtraining_type);
+		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
+		TrainingType.validateTrainingType(trainingType);
+		return userRepository.findByTrainerTypes(trainingType);
 	}
 
 	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
@@ -133,16 +141,6 @@ public class UserController {
 		User.validateUser(user);
 		user.setActiveStatus(1);
 		userRepository.save(user);
-	}
-
-	@GetMapping("/trainers-types/{iduser}")
-	public List<TrainingType> getTrainersTypes(@PathVariable int iduser) {
-		return trainingTypeRepository.findTrainersTypes(iduser);
-	}
-
-	@GetMapping("/trainers-areas/{iduser}")
-	public List<Area> getTrainersAreas(@PathVariable int iduser) {
-		return areaRepository.findTrainersAreas(iduser);
 	}
 
 }
