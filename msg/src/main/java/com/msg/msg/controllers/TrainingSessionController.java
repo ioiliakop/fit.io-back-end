@@ -56,7 +56,8 @@ public class TrainingSessionController {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
 		int id = token.getUser().getId();
-		return trainingSessionRepository.findTrainersSessions(id);
+		User trainer = userRepository.findById(id);
+		return trainingSessionRepository.findByTrainerAndCancelationStatusOrderByDateDesc(trainer, 0);
 	}
 
 	@GetMapping("/trainer-sessions-date/{date}") 
@@ -65,7 +66,8 @@ public class TrainingSessionController {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
 		int id = token.getUser().getId();
-		return trainingSessionRepository.findTrainersSessionsByDate(id, date);
+		User trainer = userRepository.findById(id);
+		return trainingSessionRepository.findByTrainerAndCancelationStatusAndDate(trainer, 0, date);
 	}
 
 	@GetMapping("/client-sessions")
@@ -73,7 +75,8 @@ public class TrainingSessionController {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
 		int id = token.getUser().getId();
-		return trainingSessionRepository.findUserSessions(id);
+		User client = userRepository.findById(id);
+		return trainingSessionRepository.findByClientAndCancelationStatusOrderByDateDesc(client, 0);
 	}
 
 	@GetMapping("/client-sessions-date/{date}")
@@ -82,7 +85,8 @@ public class TrainingSessionController {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
 		int id = token.getUser().getId();
-		return trainingSessionRepository.findUserSessionsBydate(id, date);
+		User client = userRepository.findById(id);
+		return trainingSessionRepository.findByClientAndCancelationStatusAndDate(client, 0, date);
 	}
 
 	@PostMapping("/book/{fk_trainer_id}/{idtraining_type}/{idarea}/{date}/{time}")
@@ -93,7 +97,6 @@ public class TrainingSessionController {
 		Token.validateToken(token);
 		int id = token.getUser().getId();
 		User client = userRepository.findById(id);
-//		User.validateUser(client);
 		User trainer = userRepository.findById(fk_trainer_id);
 		User.validateUser(trainer);
 		Area area = areaRepository.findById(idarea);
@@ -121,7 +124,9 @@ public class TrainingSessionController {
 			@PathVariable int fk_trainer_id) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
-		return trainingSessionRepository.findUnreadSessions(fk_trainer_id);
+		int id = token.getUser().getId();
+		User trainer = userRepository.findById(id);
+		return trainingSessionRepository.findByTrainerAndNotificationStatus(trainer, 0);
 	}
 
 	@PostMapping("/notified/{idtraining_session}")
@@ -140,12 +145,13 @@ public class TrainingSessionController {
 			@PathVariable int fk_trainer_id) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Token.validateToken(token);
-		return trainingSessionRepository.findCanceledSessions(fk_trainer_id);
+		int id = token.getUser().getId();
+		User trainer = userRepository.findById(id);
+		return trainingSessionRepository.findByTrainerAndCancelationStatus(trainer, 1);
 	}
 
 	@GetMapping("/review/{idtraining_session}")
 	public Review getSessionReview(@PathVariable int idtraining_session) {
-//		return reviewRepository.getSessionComment(idtraining_session);
 		TrainingSession trainingSession =trainingSessionRepository.findById(idtraining_session);
 		TrainingSession.validateTrainingSession(trainingSession);
 		return reviewRepository.findBySession(trainingSession);
@@ -171,10 +177,5 @@ public class TrainingSessionController {
 		reviewRepository.save(review);
 
 	}
-
-//	@PostMapping("/trainer-sessions-cancel/{idtraining_session}")
-//	public void cancelSession(@PathVariable int idtraining_session) {
-//		DatabaseHelper.cancelSession(idtraining_session);
-//	}
 
 }

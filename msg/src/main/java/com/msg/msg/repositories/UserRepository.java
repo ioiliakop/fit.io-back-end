@@ -15,10 +15,11 @@ import com.msg.msg.entities.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	List<User> findByTrainerAreasAndTrainerTypes(Area area, TrainingType trainingType);
-			
-	List<User> findByTrainerAreasAndTrainerTypes(Area area, TrainingType trainingType,  Pageable pageable);
 
-	List<User> findByTrainerAreasAndTrainerTypesAndPriceLessThanEqual(Area area, TrainingType trainingType, double price);
+	List<User> findByTrainerAreasAndTrainerTypes(Area area, TrainingType trainingType, Pageable pageable);
+
+	List<User> findByTrainerAreasAndTrainerTypesAndPriceLessThanEqual(Area area, TrainingType trainingType,
+			double price);
 
 	List<User> findByTrainerAreas(Area area);
 
@@ -41,8 +42,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	User findByEmail(String email);
 
 	User findByUsernameAndPassword(String username, String password);
-
-//	@Query(value = "SELECT * FROM user WHERE price > 0.0 AND price <= ?1", nativeQuery = true)
-//	List<User> findTrainerByPrice(double price);
 
 }
