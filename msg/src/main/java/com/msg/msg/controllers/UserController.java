@@ -39,6 +39,14 @@ public class UserController {
 
 	@Autowired
 	TokenRepository tokenRepository;
+	
+	
+	@GetMapping("/getUser/{id}")
+	public User findUser(@PathVariable int id) {
+		User user= userRepository.findById(id);
+		Validations.validateUser(user);
+		return user;
+	}
 
 	@GetMapping("/trainer/{idtraining_type}/{idarea}")
 	public List<User> getYourTrainer(@PathVariable int idtraining_type, @PathVariable int idarea) {
