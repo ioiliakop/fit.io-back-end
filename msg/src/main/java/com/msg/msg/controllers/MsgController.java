@@ -39,7 +39,7 @@ public class MsgController {
 	public TokenRepository tokenRepository;
 
 	@GetMapping("/sent")
-	public Result<Message> getSentMessages(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public Result<Message> getSentMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@RequestParam int start, @RequestParam int size) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -51,7 +51,7 @@ public class MsgController {
 	}
 
 	@GetMapping("/inbox")
-	public Result<Message> getInboxMessages(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public Result<Message> getInboxMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@RequestParam int start, @RequestParam int size) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -62,8 +62,28 @@ public class MsgController {
 		return new Result<Message>(count, msgs);
 	}
 
+	@GetMapping("/unread")
+	public Result<Message> getUnreadMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		int receiverId = token.getUser().getId();
+		List<Message> msgs = messageRepository.findUnreadMessages(receiverId);
+		int count = DatabaseHelper.getUnreadMsgCount(receiverId);
+		return new Result<Message>(count, msgs);
+	}
+
+	@PostMapping("/set-to-read/{idmessage}")
+	public void setUnreadtoReadMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
+			@PathVariable int idmessage) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		Message message = messageRepository.findById(idmessage);
+		message.setIsRead(1);
+		messageRepository.save(message);
+	}
+
 	@GetMapping("/UsersMsg/{trainerUsername}/{clientUsername}")
-	public Result<Message> getUserMessages(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public Result<Message> getUserMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable String trainerUsername, @PathVariable String clientUsername, @RequestParam int start,
 			@RequestParam int size) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
@@ -80,7 +100,7 @@ public class MsgController {
 	}
 
 	@PostMapping("/save/{receiverUsername}")
-	public void sendMessage(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public void sendMessage(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable String receiverUsername, @RequestBody String content) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);

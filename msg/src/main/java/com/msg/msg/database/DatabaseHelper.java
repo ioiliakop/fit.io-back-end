@@ -79,6 +79,22 @@ public class DatabaseHelper {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
+	
+	public static int getUnreadMsgCount(int receiverId) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn
+						.prepareStatement("SELECT COUNT(*) FROM tseam_six_3.message WHERE fk_sender_id=? AND is_read=0");) {
+			ps.setInt(1, receiverId);
+			ResultSet rs = ps.executeQuery();
+			int count = 0;
+			if (rs.next()) {
+				count = rs.getInt("COUNT(*)");
+			}
+			return count;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 
 	public static int getTrainersReviews(int id) {
 		try (Connection conn = getConnection();

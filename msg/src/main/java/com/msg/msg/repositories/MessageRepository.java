@@ -29,6 +29,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 	@Query(value="SELECT * FROM tseam_six_3.message WHERE fk_receiver_id=?1 AND fk_sender_id=?2 or fk_receiver_id=?3 AND fk_sender_id=?4 ORDER BY  time_sent DESC LIMIT ?4,?5", nativeQuery = true)
 	List <Message> findUserMessages(int fk_receiver_id,int fk_sender_id,int fk_sender_id1,int fk_receiver_id1, int index1, int index2);
 
+	@Query(value="SELECT * FROM tseam_six_3.message WHERE is_read = 0 fk_receiver_id=?1")
+	List<Message> findUnreadMessages(int fk_receiver_id);
 
 	Message findById(int id);
 }
