@@ -89,12 +89,10 @@ public class User {
 
 	@ManyToMany
 	@JoinTable(name = "trainer_area", joinColumns = @JoinColumn(name = "fk_trainer_id"), inverseJoinColumns = @JoinColumn(name = "fk_area_id"))
-	@JsonIgnore
 	List<Area> trainerAreas;
 
 	@ManyToMany
 	@JoinTable(name = "trainer_specialization", joinColumns = @JoinColumn(name = "fk_trainer_id"), inverseJoinColumns = @JoinColumn(name = "fk_training_type"))
-	@JsonIgnore
 	List<TrainingType> trainerTypes;
 
 	public User() {
@@ -262,13 +260,22 @@ public class User {
 //		this.tokens = tokens;
 //	}
 //
-//	public List<Area> getTrainerAreas() {
-//		return trainerAreas;
-//	}
-//
-//	public void setTrainerAreas(List<Area> trainerAreas) {
-//		this.trainerAreas = trainerAreas;
-//	}
+	
+	public List<TrainingType> getTrainerTypes() {
+		return trainerTypes;
+	}
+
+	public void setTrainerTypes(List<TrainingType> trainerTypes) {
+		this.trainerTypes = trainerTypes;
+	}
+
+	public List<Area> getTrainerAreas() {
+		return trainerAreas;
+	}
+	
+	public void setTrainerAreas(List<Area> trainerAreas) {
+		this.trainerAreas = trainerAreas;
+	}
 
 	@Override
 	public String toString() {
