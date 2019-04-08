@@ -96,7 +96,7 @@ public class DatabaseHelper {
 		}
 	}
 
-	public static int getTrainersReviews(int id) {
+	public static int getTrainersReviewsCount (int id) {
 		try (Connection conn = getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM review,training_session,user "
 						+ "WHERE review.fk_session_id = idtraining_session AND training_session.fk_trainer_id = user.iduser AND iduser = ?");) {
