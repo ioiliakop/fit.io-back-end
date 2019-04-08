@@ -182,7 +182,7 @@ public class TrainingSessionController {
 			@RequestParam int end) {
 		Validations.validateIndexes(start, end);
 		List<Review> reviews = reviewRepository.getTrainerComments(fk_trainer_id, start, end);
-		int count = DatabaseHelper.getTrainersReviews(fk_trainer_id);
+		int count = DatabaseHelper.getTrainersReviewsCount(fk_trainer_id);
 		return new Result<Review>(count, reviews);
 	}
 
