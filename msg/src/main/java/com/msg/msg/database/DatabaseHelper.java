@@ -18,7 +18,7 @@ public class DatabaseHelper {
 		try {
 			Properties connectionProps = new Properties();
 			connectionProps.put("user", "root");
-			connectionProps.put("password", "theo2512");
+			connectionProps.put("password", "konnos1987");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/tseam_six_3?zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true",
 					connectionProps);
@@ -83,7 +83,7 @@ public class DatabaseHelper {
 	public static int getUnreadMsgCount(int receiverId) {
 		try (Connection conn = getConnection();
 				PreparedStatement ps = conn
-						.prepareStatement("SELECT COUNT(*) FROM tseam_six_3.message WHERE fk_sender_id=? AND is_read=0");) {
+						.prepareStatement("SELECT COUNT(*) FROM tseam_six_3.message WHERE fk_receiver_id=? AND is_read=0");) {
 			ps.setInt(1, receiverId);
 			ResultSet rs = ps.executeQuery();
 			int count = 0;
@@ -99,7 +99,7 @@ public class DatabaseHelper {
 	public static int getTrainersReviews(int id) {
 		try (Connection conn = getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM review,training_session,user "
-						+ "WHERE review.fk_session_id = idtraining_session AND iduser = ?");) {
+						+ "WHERE review.fk_session_id = idtraining_session AND training_session.fk_trainer_id = user.iduser AND iduser = ?");) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			int count = 0;
