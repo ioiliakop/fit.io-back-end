@@ -126,6 +126,17 @@ public class DatabaseHelper {
 		}
 	}
 
+	
+	public static void setAllMessagesOfUserRead(int userId) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn
+						.prepareStatement("update message set is_read=1 where fk_receiver_id=?");) {
+			ps.setInt(1, userId);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 //	public static Token createToken(User user) {
 //		try (Connection conn = getConnection();
 //				PreparedStatement ps = conn

@@ -81,6 +81,14 @@ public class MsgController {
 		message.setIsRead(1);
 		messageRepository.save(message);
 	}
+	
+	@PostMapping("/setAllMessagesRead/{userId}")
+	public void setAllMessagesOfUserRead(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int userId ) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		DatabaseHelper.setAllMessagesOfUserRead(userId);
+	}
+	
 
 	@GetMapping("/UsersMsg/{trainerUsername}/{clientUsername}")
 	public Result<Message> getUserMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
