@@ -18,7 +18,7 @@ public class DatabaseHelper {
 		try {
 			Properties connectionProps = new Properties();
 			connectionProps.put("user", "root");
-			connectionProps.put("password", "konnos1987");
+			connectionProps.put("password", "theo2512");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/tseam_six_3?zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true",
 					connectionProps);
