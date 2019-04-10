@@ -126,12 +126,18 @@ public class DatabaseHelper {
 		}
 	}
 
-	public static int getTrainersCount() {
+	public static int getTrainersByTypeAndAreaCount(int typeId, int areaId) {
 		try (Connection conn = getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) user " + "WHERE fk_role_id = 2");) {
+				PreparedStatement ps = conn.prepareStatement("select count(iduser)\r\n"
+						+ " FROM user, trainer_area,  trainer_specialization, area ,training_type\r\n"
+						+ "			WHERE user.iduser=trainer_specialization.fk_trainer_id AND user.iduser=trainer_area.fk_trainer_id AND \r\n"
+						+ "			training_type.idtraining_type=trainer_specialization.fk_training_type AND area.idarea=trainer_area.fk_area_id\r\n"
+						+ "			AND training_type.idtraining_type =? AND idarea =?;");) {
+			ps.setInt(1, typeId);
+			ps.setInt(2, areaId);
 			ResultSet rs = ps.executeQuery();
 			int count = 0;
-			if (rs.next()) {
+			while (rs.next()) {
 				count = rs.getInt("COUNT(*)");
 			}
 			return count;
@@ -140,15 +146,30 @@ public class DatabaseHelper {
 		}
 	}
 
-	public static void setAllMessagesOfUserRead(int userId) {
+	public static int getTrainersCount() {
 		try (Connection conn = getConnection();
-				PreparedStatement ps = conn.prepareStatement("update message set is_read=1 where fk_receiver_id=?");) {
-			ps.setInt(1, userId);
-			ps.executeUpdate();
+				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) user " + "WHERE fk_role_id = 2");) {
+			ResultSet rs = ps.executeQuery();
+			int count = 0;
+			while (rs.next()) {
+				count = rs.getInt("COUNT(*)");
+			}
+			return count;
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
+
+//	public static void setAllMessagesOfUserRead(int userId) {
+//		try (Connection conn = getConnection();
+//				PreparedStatement ps = conn.prepareStatement("update message set is_read=1 where fk_receiver_id=?");) {
+//			ps.setInt(1, userId);
+//			ps.executeUpdate();
+//		} catch (Exception e) {
+//			throw new RuntimeException(e.getMessage(), e);
+//		}
+//	}
+
 //	public static Token createToken(User user) {
 //		try (Connection conn = getConnection();
 //				PreparedStatement ps = conn

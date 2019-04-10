@@ -20,6 +20,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
 	List<Message> findByReceiverOrderByDateDesc(User receiver, Pageable pageable);
 	
+	List<Message> findByReceiverAndIsRead(User receiver, int status);
+	
 	@Query(value="SELECT * FROM tseam_six_3.message WHERE fk_receiver_id=?1 ORDER BY time_sent DESC LIMIT ?2,?3", nativeQuery = true)
 	List <Message> findInboxMessages(int fk_receiver_id, int start, int count);
 

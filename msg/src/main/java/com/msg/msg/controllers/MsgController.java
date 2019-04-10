@@ -49,6 +49,17 @@ public class MsgController {
 		int count = DatabaseHelper.getSentMsgCount(senderId);
 		return new Result<Message>(count, msgs);
 	}
+	
+	@GetMapping("/sent/{userId}")
+	public Result<Message> getSentMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
+			@RequestParam int start, @RequestParam int size, @PathVariable int userId ) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		Validations.validateIndexes(start, size);
+		List<Message> msgs = messageRepository.findSentMessages(userId, start, size);
+		int count = DatabaseHelper.getSentMsgCount(userId);
+		return new Result<Message>(count, msgs);
+	}
 
 	@GetMapping("/inbox")
 	public Result<Message> getInboxMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
@@ -59,6 +70,17 @@ public class MsgController {
 		int receiverId = token.getUser().getId();
 		List<Message> msgs = messageRepository.findInboxMessages(receiverId, start, size);
 		int count = DatabaseHelper.getInboxMsgCount(receiverId);
+		return new Result<Message>(count, msgs);
+	}
+	
+	@GetMapping("/inbox/{userId}")
+	public Result<Message> getInboxMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
+			@RequestParam int start, @RequestParam int size, @PathVariable int userId) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		Validations.validateIndexes(start, size);
+		List<Message> msgs = messageRepository.findInboxMessages(userId, start, size);
+		int count = DatabaseHelper.getInboxMsgCount(userId);
 		return new Result<Message>(count, msgs);
 	}
 
@@ -82,11 +104,17 @@ public class MsgController {
 		messageRepository.save(message);
 	}
 	
-	@PostMapping("/setAllMessagesRead/{userId}")
-	public void setAllMessagesOfUserRead(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int userId ) {
+	@PostMapping("/setAllMessagesRead")
+	public void setAllMessagesOfUserRead(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric ) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		DatabaseHelper.setAllMessagesOfUserRead(userId);
+		int userId = token.getUser().getId();
+		User user = userRepository.findById(userId);
+		List<Message> msgs = messageRepository.findByReceiverAndIsRead(user, 0);
+		for (Message message:msgs) {
+			message.setIsRead(1);
+			messageRepository.save(message);
+		}
 	}
 	
 

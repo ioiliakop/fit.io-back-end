@@ -58,7 +58,7 @@ public class User {
 	private String photoLink;
 
 	@Column(name = "is_banned")
-	private int activeStatus;
+	private int bannedStatus;
 
 	@Column(name = "random_num")
 	private String randomNum;
@@ -204,12 +204,12 @@ public class User {
 		this.photoLink = photoLink;
 	}
 
-	public int getActiveStatus() {
-		return activeStatus;
+	public int getBannedStatus() {
+		return bannedStatus;
 	}
 
-	public void setActiveStatus(int activeStatus) {
-		this.activeStatus = activeStatus;
+	public void setBannedStatus(int activeStatus) {
+		this.bannedStatus = activeStatus;
 	}
 
 	public String getRandomNum() {

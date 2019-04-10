@@ -3,6 +3,7 @@ package com.msg.msg.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,6 +68,18 @@ public class UserController {
 		Area area = areaRepository.findById(idarea);
 		Validations.validateArea(area);
 		return userRepository.findByTrainerAreasAndTrainerTypes(area, trainingType);
+	}
+	
+	@GetMapping("/trainer2/{idtraining_type}/{idarea}") //Pageable
+	public Result<User> getYourTrainer(@PathVariable int idtraining_type, @PathVariable int idarea,
+			@RequestParam int page, @RequestParam int size) {
+		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
+		Validations.validateTrainingType(trainingType);
+		Area area = areaRepository.findById(idarea);
+		Validations.validateArea(area);
+		int count = DatabaseHelper.getTrainersByTypeAndAreaCount(idtraining_type, idarea);
+		List<User>trainers = userRepository.findByTrainerAreasAndTrainerTypes(area, trainingType, PageRequest.of(page, size));
+		return new Result<User>(count, trainers);
 	}
 
 	@GetMapping("/trainer/{idarea}/{idtraining_type}/{price}")
@@ -192,7 +205,7 @@ public class UserController {
 		Validations.validateToken(token);
 		User user = userRepository.findById(iduser);
 		Validations.validateUser(user);
-		user.setActiveStatus(0);
+		user.setBannedStatus(1);
 		userRepository.save(user);
 	}
 
@@ -202,7 +215,7 @@ public class UserController {
 		Validations.validateToken(token);
 		User user = userRepository.findById(iduser);
 		Validations.validateUser(user);
-		user.setActiveStatus(1);
+		user.setBannedStatus(0);
 		userRepository.save(user);
 	}
 
