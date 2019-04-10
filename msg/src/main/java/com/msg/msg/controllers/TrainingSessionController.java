@@ -178,6 +178,17 @@ public class TrainingSessionController {
 		User trainer = userRepository.findById(id);
 		return trainingSessionRepository.findByTrainerAndCancelationStatusAndReadCancelationStatus(trainer, 1, 0);
 	}
+	
+	@PostMapping("/set-canceled-sessions-read/{idtraining_session}")
+	public void setCanceledSessionsToRead(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
+			@PathVariable int idtraining_session) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
+		Validations.validateTrainingSession(trainingSession);
+		trainingSession.setReadCancelationStatus(1);
+		trainingSessionRepository.save(trainingSession);
+	}
 
 	@GetMapping("/review/{idtraining_session}")
 	public Review getSessionReview(@PathVariable int idtraining_session) {

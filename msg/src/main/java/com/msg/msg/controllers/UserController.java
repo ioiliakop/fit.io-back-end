@@ -57,7 +57,7 @@ public class UserController {
 		Validations.validateToken(token);
 		int count = DatabaseHelper.getUsersCount();
 		List<User> users = userRepository.getAllUsers(start, size);
-		return new Result(count, users);
+		return new Result<User>(count, users);
 	}
 
 	@GetMapping("/trainer/{idtraining_type}/{idarea}")
