@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.msg.msg.database.DatabaseHelper;
 import com.msg.msg.entities.Area;
+import com.msg.msg.entities.Result;
 import com.msg.msg.entities.Role;
 import com.msg.msg.entities.Token;
 import com.msg.msg.entities.TrainingType;
@@ -39,15 +42,23 @@ public class UserController {
 
 	@Autowired
 	TokenRepository tokenRepository;
-	
-	
+
 	@GetMapping("/getUser/{id}")
 	public User findUser(@PathVariable int id) {
-		User user= userRepository.findById(id);
+		User user = userRepository.findById(id);
 		Validations.validateUser(user);
 		return user;
 	}
-	
+
+	@GetMapping("/all")
+	public Result<User> getAllUsers(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @RequestParam int start,
+			@RequestParam int size) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		int count = DatabaseHelper.getUsersCount();
+		List<User> users = userRepository.getAllUsers(start, size);
+		return new Result(count, users);
+	}
 
 	@GetMapping("/trainer/{idtraining_type}/{idarea}")
 	public List<User> getYourTrainer(@PathVariable int idtraining_type, @PathVariable int idarea) {

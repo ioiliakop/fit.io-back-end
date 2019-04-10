@@ -57,7 +57,7 @@ public class User {
 	@Column(name = "photo_link")
 	private String photoLink;
 
-	@Column(name = "is_active")
+	@Column(name = "is_banned")
 	private int activeStatus;
 
 	@Column(name = "random_num")

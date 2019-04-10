@@ -18,7 +18,7 @@ public class DatabaseHelper {
 		try {
 			Properties connectionProps = new Properties();
 			connectionProps.put("user", "root");
-			connectionProps.put("password", "theo2512");
+			connectionProps.put("password", "konnos1987");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/tseam_six_3?zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true",
 					connectionProps);
@@ -27,6 +27,20 @@ public class DatabaseHelper {
 		}
 
 		return conn;
+	}
+
+	public static int getUsersCount() {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM tseam_six_3.user");) {
+			int count = 0;
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				count = rs.getInt("COUNT(*)");
+			}
+			return count;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
 
 	public static int getSentMsgCount(int id) {
@@ -79,11 +93,11 @@ public class DatabaseHelper {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
-	
+
 	public static int getUnreadMsgCount(int receiverId) {
 		try (Connection conn = getConnection();
-				PreparedStatement ps = conn
-						.prepareStatement("SELECT COUNT(*) FROM tseam_six_3.message WHERE fk_receiver_id=? AND is_read=0");) {
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT COUNT(*) FROM tseam_six_3.message WHERE fk_receiver_id=? AND is_read=0");) {
 			ps.setInt(1, receiverId);
 			ResultSet rs = ps.executeQuery();
 			int count = 0;
@@ -96,7 +110,7 @@ public class DatabaseHelper {
 		}
 	}
 
-	public static int getTrainersReviewsCount (int id) {
+	public static int getTrainersReviewsCount(int id) {
 		try (Connection conn = getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM review,training_session,user "
 						+ "WHERE review.fk_session_id = idtraining_session AND training_session.fk_trainer_id = user.iduser AND iduser = ?");) {
@@ -126,11 +140,9 @@ public class DatabaseHelper {
 		}
 	}
 
-	
 	public static void setAllMessagesOfUserRead(int userId) {
 		try (Connection conn = getConnection();
-				PreparedStatement ps = conn
-						.prepareStatement("update message set is_read=1 where fk_receiver_id=?");) {
+				PreparedStatement ps = conn.prepareStatement("update message set is_read=1 where fk_receiver_id=?");) {
 			ps.setInt(1, userId);
 			ps.executeUpdate();
 		} catch (Exception e) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.msg.msg.entities.Area;
@@ -44,5 +45,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	List<User> findByRole(Role role);
 
 	List<User> findByRole(Role role, Pageable pageable);//not used
+	
+	@Query(value = "SELECT * FROM user LIMIT ?1,?2", nativeQuery = true)
+	List<User> getAllUsers(int start, int size);
 
 }

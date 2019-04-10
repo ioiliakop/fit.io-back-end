@@ -125,7 +125,6 @@ public class TrainingSessionController {
 		Validations.validateTrainingType(trainingType);
 		TrainingSession trainingSession = new TrainingSession(client, trainer, area, trainingType, date, time);
 		trainingSessionRepository.save(trainingSession);
-
 	}
 
 	@PostMapping("/cancel-session/{idtraining_session}")
@@ -137,6 +136,16 @@ public class TrainingSessionController {
 		Validations.validateTrainingSession(trainingSession);
 		trainingSession.setCancelationStatus(1);
 		trainingSessionRepository.save(trainingSession);
+	}
+	
+	@PostMapping("/deleteNotifiedCanceledSessions/{idtraining_session}")
+	public void deleteCanceledSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
+			@PathVariable int idtraining_session) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
+		Validations.validateTrainingSession(trainingSession);
+		trainingSessionRepository.delete(trainingSession);
 	}
 
 	@GetMapping("/notify-booked-sessions/{fk_trainer_id}")
@@ -167,7 +176,7 @@ public class TrainingSessionController {
 		Validations.validateToken(token);
 		int id = token.getUser().getId();
 		User trainer = userRepository.findById(id);
-		return trainingSessionRepository.findByTrainerAndCancelationStatus(trainer, 1);
+		return trainingSessionRepository.findByTrainerAndCancelationStatusAndReadCancelationStatus(trainer, 1, 0);
 	}
 
 	@GetMapping("/review/{idtraining_session}")
