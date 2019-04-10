@@ -80,12 +80,12 @@ public class RegisterController {
 		}
 	}
 
-	@PostMapping("/confirmed/{iduser}")
-	public void enableAcount(@PathVariable int iduser) {
-		User user = userRepository.findById(iduser);
-		Validations.validateUser(user);
-		user.setActiveStatus(1);
-		userRepository.save(user);
-	}
+//	@PostMapping("/confirmed/{iduser}")
+//	public void enableAcount(@PathVariable int iduser) {
+//		User user = userRepository.findById(iduser);
+//		Validations.validateUser(user);
+//		user.setActiveStatus(1);
+//		userRepository.save(user);
+//	}
 
 }
