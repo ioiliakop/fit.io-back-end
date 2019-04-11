@@ -3,7 +3,6 @@ package com.msg.msg.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,8 +44,8 @@ public class MsgController {
 		Validations.validateToken(token);
 		Validations.validateIndexes(start, size);
 		int senderId = token.getUser().getId();
-		List<Message> msgs = messageRepository.findSentMessages(senderId, start, size);
 		int count = DatabaseHelper.getSentMsgCount(senderId);
+		List<Message> msgs = messageRepository.findSentMessages(senderId, start, size);
 		return new Result<Message>(count, msgs);
 	}
 	
@@ -56,8 +55,8 @@ public class MsgController {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
 		Validations.validateIndexes(start, size);
-		List<Message> msgs = messageRepository.findSentMessages(userId, start, size);
 		int count = DatabaseHelper.getSentMsgCount(userId);
+		List<Message> msgs = messageRepository.findSentMessages(userId, start, size);
 		return new Result<Message>(count, msgs);
 	}
 
@@ -68,8 +67,8 @@ public class MsgController {
 		Validations.validateToken(token);
 		Validations.validateIndexes(start, size);
 		int receiverId = token.getUser().getId();
-		List<Message> msgs = messageRepository.findInboxMessages(receiverId, start, size);
 		int count = DatabaseHelper.getInboxMsgCount(receiverId);
+		List<Message> msgs = messageRepository.findInboxMessages(receiverId, start, size);
 		return new Result<Message>(count, msgs);
 	}
 	
@@ -79,8 +78,8 @@ public class MsgController {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
 		Validations.validateIndexes(start, size);
-		List<Message> msgs = messageRepository.findInboxMessages(userId, start, size);
 		int count = DatabaseHelper.getInboxMsgCount(userId);
+		List<Message> msgs = messageRepository.findInboxMessages(userId, start, size);
 		return new Result<Message>(count, msgs);
 	}
 
@@ -88,13 +87,13 @@ public class MsgController {
 	public Result<Message> getUnreadMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int receiverId = token.getUser().getId();
-		List<Message> msgs = messageRepository.findUnreadMessages(receiverId);
-		int count = DatabaseHelper.getUnreadMsgCount(receiverId);
+		User receiver = token.getUser();
+		int count = DatabaseHelper.getUnreadMsgCount(receiver.getId());
+		List<Message> msgs = messageRepository.findByReceiverAndIsRead(receiver, 0);
 		return new Result<Message>(count, msgs);
 	}
 
-	@PostMapping("/set-to-read/{idmessage}")
+	@PostMapping("/set-to-read/{idmessage}")//not used
 	public void setUnreadtoReadMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable int idmessage) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
@@ -118,7 +117,7 @@ public class MsgController {
 	}
 	
 
-	@GetMapping("/UsersMsg/{trainerUsername}/{clientUsername}")
+	@GetMapping("/UsersMsg/{trainerUsername}/{clientUsername}")//not used
 	public Result<Message> getUserMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable String trainerUsername, @PathVariable String clientUsername, @RequestParam int start,
 			@RequestParam int size) {
@@ -140,8 +139,7 @@ public class MsgController {
 			@PathVariable String receiverUsername, @RequestBody String content) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int senderId = token.getUser().getId();
-		User sender = userRepository.findById(senderId);
+		User sender = token.getUser();
 		User receiver = userRepository.findByUsername(receiverUsername);
 		Validations.validateUser(receiver);
 		Message message = new Message(sender, receiver, content);

@@ -143,7 +143,7 @@ public class TrainingSessionController {
 		trainingSessionRepository.delete(trainingSession);
 	}
 
-	@GetMapping("/notify-booked-sessions/{fk_trainer_id}")//
+	@GetMapping("/notify-booked-sessions")//
 	public List<TrainingSession> notifyForUnreadSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -162,12 +162,20 @@ public class TrainingSessionController {
 		trainingSessionRepository.save(trainingSession);
 	}
 
-	@GetMapping("/notify-canceled-sessions/{fk_trainer_id}")//
-	public List<TrainingSession> getCanceledSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
+	@GetMapping("/notify-trainer-canceled-sessions")
+	public List<TrainingSession> getCanceledSessionsForTrainer(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
 		User trainer = token.getUser();
 		return trainingSessionRepository.findByTrainerAndCancelationStatusAndReadCancelationStatus(trainer, 1, 0);
+	}
+	
+	@GetMapping("/notify-client-canceled-sessions")
+	public List<TrainingSession> getCanceledSessionsForClient(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		User client = token.getUser();
+		return trainingSessionRepository.findByClientAndCancelationStatusAndReadCancelationStatus(client, 1, 0);
 	}
 	
 	@PostMapping("/set-canceled-sessions-read/{idtraining_session}")

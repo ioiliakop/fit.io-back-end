@@ -57,7 +57,7 @@ public class RegisterController {
 		}
 	}
 
-	@PutMapping("/update")
+	@PutMapping("/update")//not used
 	public void updateUser(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @RequestBody User user) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -74,6 +74,7 @@ public class RegisterController {
 				String sha256hex = DigestUtils.sha256Hex(password + random);
 				user.setPassword(sha256hex);
 				userRepository.save(user);
+				
 			}
 		} else {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email Already Exists");

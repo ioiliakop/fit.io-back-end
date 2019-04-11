@@ -126,7 +126,7 @@ public class DatabaseHelper {
 		}
 	}
 
-	public static int getTrainersByTypeAndAreaCount(int typeId, int areaId) {
+	public static int getTrainersCountByTypeAndArea(int typeId, int areaId) {
 		try (Connection conn = getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(iduser)\r\n"
 						+ " FROM user, trainer_area,  trainer_specialization, area ,training_type\r\n"
@@ -146,9 +146,44 @@ public class DatabaseHelper {
 		}
 	}
 
+	public static int getTrainersCountByArea(int areaId) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(iduser)\r\n"
+						+ "+ FROM user,trainer_area,area WHERE iduser=fk_trainer_id AND fk_area_id=idarea AND idarea=?");) {
+			ps.setInt(1, areaId);
+			ResultSet rs = ps.executeQuery();
+			int count = 0;
+			while (rs.next()) {
+				count = rs.getInt("COUNT(iduser)");
+			}
+			return count;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+
+	}
+	
+	public static int getTrainersCountByType(int typeId) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(iduser)\r\n"
+						+ "+ FROM user,trainer_specialization,training_type "
+						+ "WHERE iduser=fk_trainer_id AND fk_training_type=idtraining_type AND idtraining_type =?");) {
+			ps.setInt(1, typeId);
+			ResultSet rs = ps.executeQuery();
+			int count = 0;
+			while (rs.next()) {
+				count = rs.getInt("COUNT(iduser)");
+			}
+			return count;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+
+	}
+
 	public static int getTrainersCount() {
 		try (Connection conn = getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) user " + "WHERE fk_role_id = 2");) {
+				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM user WHERE fk_role_id = 2");) {
 			ResultSet rs = ps.executeQuery();
 			int count = 0;
 			while (rs.next()) {

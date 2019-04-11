@@ -22,6 +22,7 @@ import com.msg.msg.entities.Token;
 import com.msg.msg.entities.TrainingType;
 import com.msg.msg.entities.User;
 import com.msg.msg.repositories.AreaRepository;
+import com.msg.msg.repositories.RoleRepository;
 import com.msg.msg.repositories.TokenRepository;
 import com.msg.msg.repositories.TrainingTypeRepository;
 import com.msg.msg.repositories.UserRepository;
@@ -42,7 +43,10 @@ public class UserController {
 	public TrainingTypeRepository trainingTypeRepository;
 
 	@Autowired
-	TokenRepository tokenRepository;
+	public TokenRepository tokenRepository;
+
+	@Autowired
+	public RoleRepository roleRepository;
 
 	@GetMapping("/getUser/{id}")
 	public User findUser(@PathVariable int id) {
@@ -62,22 +66,13 @@ public class UserController {
 	}
 
 	@GetMapping("/trainer/{idtraining_type}/{idarea}")
-	public List<User> getYourTrainer(@PathVariable int idtraining_type, @PathVariable int idarea) {
-		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
-		Validations.validateTrainingType(trainingType);
-		Area area = areaRepository.findById(idarea);
-		Validations.validateArea(area);
-		return userRepository.findByTrainerAreasAndTrainerTypes(area, trainingType);
-	}
-
-	@GetMapping("/trainer2/{idtraining_type}/{idarea}") // Pageable
 	public Result<User> getYourTrainer(@PathVariable int idtraining_type, @PathVariable int idarea,
 			@RequestParam int page, @RequestParam int size) {
 		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
 		Validations.validateTrainingType(trainingType);
 		Area area = areaRepository.findById(idarea);
 		Validations.validateArea(area);
-		int count = DatabaseHelper.getTrainersByTypeAndAreaCount(idtraining_type, idarea);
+		int count = DatabaseHelper.getTrainersCountByTypeAndArea(idtraining_type, idarea);
 		List<User> trainers = userRepository.findByTrainerAreasAndTrainerTypes(area, trainingType,
 				PageRequest.of(page, size));
 		return new Result<User>(count, trainers);
@@ -94,10 +89,12 @@ public class UserController {
 	}
 
 	@GetMapping("trainers-area/{idarea}")
-	public List<User> getTrainerByArea(@PathVariable int idarea) {
+	public Result<User> getTrainerByArea(@PathVariable int idarea, @RequestParam int page, @RequestParam int size) {
 		Area area = areaRepository.findById(idarea);
 		Validations.validateArea(area);
-		return userRepository.findByTrainerAreas(area);
+		int count = DatabaseHelper.getTrainersCountByArea(idarea);
+		List<User> trainers = userRepository.findByTrainerAreas(area, PageRequest.of(page, size));
+		return new Result<User>(count, trainers);
 	}
 
 	@GetMapping("trainer-area-price/{idarea}/{price}")
@@ -112,17 +109,24 @@ public class UserController {
 		return userRepository.findByPriceGreaterThanAndPriceLessThanEqual(0, priceMax);
 	}
 
-	@GetMapping("all-trainers")
-	public List<User> getAllTrainers(@RequestBody Role role) {
+	@GetMapping("all-trainers/{idrole}")
+	public Result<User> getAllTrainers(@PathVariable int idrole, @RequestParam int page, @RequestParam int size) {
+		Role role = roleRepository.findById(idrole);
 		Validations.validateRole(role);
-		return userRepository.findByRole(role);
+		int count = DatabaseHelper.getTrainersCount();
+		List<User> trainers = userRepository.findByRole(role, PageRequest.of(page, size));
+		return new Result<User>(count, trainers);
 	}
 
 	@GetMapping("trainer-type/{idtraining_type}")
-	public List<User> getTrainerByType(@PathVariable int idtraining_type) {
+	public Result<User> getTrainerByType(@PathVariable int idtraining_type, @RequestParam int page,
+			@RequestParam int size) {
 		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
 		Validations.validateTrainingType(trainingType);
-		return userRepository.findByTrainerTypes(trainingType);
+		int count = DatabaseHelper.getTrainersCountByType(idtraining_type);
+		List<User> trainers = userRepository.findByTrainerTypes(trainingType, PageRequest.of(page, size));
+		return new Result<User>(count, trainers);
+
 	}
 
 	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
@@ -132,7 +136,7 @@ public class UserController {
 		return userRepository.findByTrainerTypesAndPriceLessThanEqual(trainingType, price);
 	}
 
-	@PostMapping("set-price/{price}") //
+	@PostMapping("set-price/{price}")
 	public void setPrice(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable double price) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -141,7 +145,17 @@ public class UserController {
 		userRepository.save(user);
 	}
 
-	@PostMapping("trainer-choose-area/{fk_area_id}") //
+	@PostMapping("set-description")
+	public void setDescription(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
+			@RequestBody String description) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Validations.validateToken(token);
+		User user = token.getUser();
+		user.setDescription(description);
+		userRepository.save(user);
+	}
+
+	@PostMapping("trainer-choose-area/{fk_area_id}")
 	public void chooseArea(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int fk_area_id) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -152,7 +166,7 @@ public class UserController {
 		userRepository.save(user);
 	}
 
-	@PostMapping("trainer-choose-type/{fk_training_type}") //
+	@PostMapping("trainer-choose-type/{fk_training_type}")
 	public void trainerSpecialization(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable int fk_training_type) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
@@ -164,7 +178,7 @@ public class UserController {
 		userRepository.save(user);
 	}
 
-	@PostMapping("trainer-remove-area/{fk_area_id}") //
+	@PostMapping("trainer-remove-area/{fk_area_id}")
 	public void removeArea(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int fk_area_id) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -175,7 +189,7 @@ public class UserController {
 		userRepository.save(user);
 	}
 
-	@PostMapping("trainer-remove-type/{fk_training_type}") //
+	@PostMapping("trainer-remove-type/{fk_training_type}")
 	public void removeType(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable int fk_training_type) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
@@ -186,32 +200,6 @@ public class UserController {
 		user.removeTrainingType(trainingType);
 		userRepository.save(user);
 
-	}
-
-	@PostMapping("/addAreas/{userId}") // maybe
-	public void addAreas(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int userId,
-			@RequestBody List<Area> areas) {
-		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		Validations.validateToken(token);
-		for (Area area : areas) {
-			areaRepository.addArea(userId, area.getId());
-		}
-	}
-
-	@PostMapping("/addTrainingTypes/{userId}") // maybe
-	public void addTrainingTypes(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric, @PathVariable int userId,
-			@RequestBody List<TrainingType> types) {
-		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		Validations.validateToken(token);
-		User user = userRepository.findById(userId);
-		Validations.validateUser(user);
-		List<TrainingType> TrainingTypesThatTrainerHas = trainingTypeRepository.findByTrainers(user);
-		for (TrainingType type : TrainingTypesThatTrainerHas) {
-			trainingTypeRepository.removeType(userId, type.getId());
-		}
-		for (TrainingType type : types) {
-			trainingTypeRepository.addType(userId, type.getId());
-		}
 	}
 
 	@PostMapping("bann-user/{iduser}")
