@@ -128,7 +128,7 @@ public class DatabaseHelper {
 
 	public static int getTrainersByTypeAndAreaCount(int typeId, int areaId) {
 		try (Connection conn = getConnection();
-				PreparedStatement ps = conn.prepareStatement("select count(iduser)\r\n"
+				PreparedStatement ps = conn.prepareStatement("SELECT COUNT(iduser)\r\n"
 						+ " FROM user, trainer_area,  trainer_specialization, area ,training_type\r\n"
 						+ "			WHERE user.iduser=trainer_specialization.fk_trainer_id AND user.iduser=trainer_area.fk_trainer_id AND \r\n"
 						+ "			training_type.idtraining_type=trainer_specialization.fk_training_type AND area.idarea=trainer_area.fk_area_id\r\n"
@@ -138,7 +138,7 @@ public class DatabaseHelper {
 			ResultSet rs = ps.executeQuery();
 			int count = 0;
 			while (rs.next()) {
-				count = rs.getInt("COUNT(*)");
+				count = rs.getInt("COUNT(iduser)");
 			}
 			return count;
 		} catch (Exception e) {
