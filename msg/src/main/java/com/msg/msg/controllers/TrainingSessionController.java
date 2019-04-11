@@ -56,8 +56,7 @@ public class TrainingSessionController {
 	public List<TrainingSession> getTrainersSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int id = token.getUser().getId();
-		User trainer = userRepository.findById(id);
+		User trainer = token.getUser();
 		return trainingSessionRepository.findByTrainerAndCancelationStatusOrderByDateDesc(trainer, 0);
 	}
 	
@@ -75,8 +74,7 @@ public class TrainingSessionController {
 			@PathVariable String date) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int id = token.getUser().getId();
-		User trainer = userRepository.findById(id);
+		User trainer = token.getUser();
 		return trainingSessionRepository.findByTrainerAndCancelationStatusAndDate(trainer, 0, date);
 	}
 	
@@ -94,18 +92,16 @@ public class TrainingSessionController {
 	public List<TrainingSession> getClientSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int id = token.getUser().getId();
-		User client = userRepository.findById(id);
+		User client = token.getUser();
 		return trainingSessionRepository.findByClientAndCancelationStatusOrderByDateDesc(client, 0);
 	}
 
 	@GetMapping("/client-sessions-date/{date}")
-	public List<TrainingSession> getCientssSessionsByDate(@RequestHeader("X-MSG-AUTH") String alphanumeric,
+	public List<TrainingSession> getCientsSessionsByDate(@RequestHeader("X-MSG-AUTH") String alphanumeric,
 			@PathVariable String date) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int id = token.getUser().getId();
-		User client = userRepository.findById(id);
+		User client =  token.getUser();
 		return trainingSessionRepository.findByClientAndCancelationStatusAndDate(client, 0, date);
 	}
 
@@ -115,8 +111,7 @@ public class TrainingSessionController {
 			@PathVariable String time) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int id = token.getUser().getId();
-		User client = userRepository.findById(id);
+		User client = token.getUser();
 		User trainer = userRepository.findById(fk_trainer_id);
 		Validations.validateUser(trainer);
 		Area area = areaRepository.findById(idarea);
@@ -148,13 +143,11 @@ public class TrainingSessionController {
 		trainingSessionRepository.delete(trainingSession);
 	}
 
-	@GetMapping("/notify-booked-sessions/{fk_trainer_id}")
-	public List<TrainingSession> notifyForUnreadSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
-			@PathVariable int fk_trainer_id) {
+	@GetMapping("/notify-booked-sessions/{fk_trainer_id}")//
+	public List<TrainingSession> notifyForUnreadSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int id = token.getUser().getId();
-		User trainer = userRepository.findById(id);
+		User trainer = token.getUser();
 		return trainingSessionRepository.findByTrainerAndNotificationStatus(trainer, 0);
 	}
 
@@ -169,13 +162,11 @@ public class TrainingSessionController {
 		trainingSessionRepository.save(trainingSession);
 	}
 
-	@GetMapping("/notify-canceled-sessions/{fk_trainer_id}")
-	public List<TrainingSession> getCanceledSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
-			@PathVariable int fk_trainer_id) {
+	@GetMapping("/notify-canceled-sessions/{fk_trainer_id}")//
+	public List<TrainingSession> getCanceledSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		int id = token.getUser().getId();
-		User trainer = userRepository.findById(id);
+		User trainer = token.getUser();
 		return trainingSessionRepository.findByTrainerAndCancelationStatusAndReadCancelationStatus(trainer, 1, 0);
 	}
 	

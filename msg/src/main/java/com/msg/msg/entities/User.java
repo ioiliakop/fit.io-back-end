@@ -98,20 +98,6 @@ public class User {
 	public User() {
 	}
 
-//	public User(int id, String username, String password, Role role, String firstName, String lastName, String email,
-//			double price, String description, String photoLink) {
-//		this.id = id;
-//		this.username = username;
-//		this.password = password;
-//		this.role = role;
-//		this.firstName = firstName;
-//		this.lastName = lastName;
-//		this.email = email;
-//		this.price = price;
-//		this.description = description;
-//		this.photoLink = photoLink;
-//	}
-
 	public User(String username, String password, Role role, String firstName, String lastName, String email,
 			double price, String description) {
 		this.username = username;
@@ -260,7 +246,7 @@ public class User {
 //		this.tokens = tokens;
 //	}
 //
-	
+
 	public List<TrainingType> getTrainerTypes() {
 		return trainerTypes;
 	}
@@ -272,9 +258,25 @@ public class User {
 	public List<Area> getTrainerAreas() {
 		return trainerAreas;
 	}
-	
+
 	public void setTrainerAreas(List<Area> trainerAreas) {
 		this.trainerAreas = trainerAreas;
+	}
+
+	public void addTrainingArea(Area area) {
+		this.trainerAreas.add(area);
+	}
+
+	public void removeTrainingArea(Area area) {
+		this.trainerAreas.remove(area);
+	}
+
+	public void addTrainingType(TrainingType trainingType) {
+		this.trainerTypes.add(trainingType);
+	}
+
+	public void removeTrainingType(TrainingType trainingType) {
+		this.trainerTypes.remove(trainingType);
 	}
 
 	@Override
