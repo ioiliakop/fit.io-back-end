@@ -48,10 +48,10 @@ public class MsgController {
 		List<Message> msgs = messageRepository.findSentMessages(senderId, start, size);
 		return new Result<Message>(count, msgs);
 	}
-	
+
 	@GetMapping("/sent/{userId}")
 	public Result<Message> getSentMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
-			@RequestParam int start, @RequestParam int size, @PathVariable int userId ) {
+			@RequestParam int start, @RequestParam int size, @PathVariable int userId) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
 		Validations.validateStartAndSize(start, size);
@@ -71,7 +71,7 @@ public class MsgController {
 		List<Message> msgs = messageRepository.findInboxMessages(receiverId, start, size);
 		return new Result<Message>(count, msgs);
 	}
-	
+
 	@GetMapping("/inbox/{userId}")
 	public Result<Message> getInboxMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@RequestParam int start, @RequestParam int size, @PathVariable int userId) {
@@ -93,7 +93,7 @@ public class MsgController {
 		return new Result<Message>(count, msgs);
 	}
 
-	@PostMapping("/set-to-read/{idmessage}")//not used
+	@PostMapping("/set-to-read/{idmessage}") // not used
 	public void setUnreadtoReadMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable int idmessage) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
@@ -102,22 +102,21 @@ public class MsgController {
 		message.setIsRead(1);
 		messageRepository.save(message);
 	}
-	
+
 	@PostMapping("/setAllMessagesRead")
-	public void setAllMessagesOfUserRead(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric ) {
+	public void setAllMessagesOfUserRead(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
 		int userId = token.getUser().getId();
 		User user = userRepository.findById(userId);
 		List<Message> msgs = messageRepository.findByReceiverAndIsRead(user, 0);
-		for (Message message:msgs) {
+		for (Message message : msgs) {
 			message.setIsRead(1);
 			messageRepository.save(message);
 		}
 	}
-	
 
-	@GetMapping("/UsersMsg/{trainerUsername}/{clientUsername}")//not used
+	@GetMapping("/UsersMsg/{trainerUsername}/{clientUsername}") // not used
 	public Result<Message> getUserMessages(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric,
 			@PathVariable String trainerUsername, @PathVariable String clientUsername, @RequestParam int start,
 			@RequestParam int size) {
