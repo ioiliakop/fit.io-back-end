@@ -60,6 +60,7 @@ public class UserController {
 			@RequestParam int size) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
+		Validations.validateStartAndSize(start, size);
 		int count = DatabaseHelper.getUsersCount();
 		List<User> users = userRepository.getAllUsers(start, size);
 		return new Result<User>(count, users);
@@ -70,6 +71,7 @@ public class UserController {
 			@RequestParam int page, @RequestParam int size) {
 		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
 		Validations.validateTrainingType(trainingType);
+		Validations.validatePageAndSize(page, size);
 		Area area = areaRepository.findById(idarea);
 		Validations.validateArea(area);
 		int count = DatabaseHelper.getTrainersCountByTypeAndArea(idtraining_type, idarea);
@@ -90,6 +92,7 @@ public class UserController {
 
 	@GetMapping("trainers-area/{idarea}")
 	public Result<User> getTrainerByArea(@PathVariable int idarea, @RequestParam int page, @RequestParam int size) {
+		Validations.validatePageAndSize(page, size);
 		Area area = areaRepository.findById(idarea);
 		Validations.validateArea(area);
 		int count = DatabaseHelper.getTrainersCountByArea(idarea);
@@ -111,6 +114,7 @@ public class UserController {
 
 	@GetMapping("all-trainers/{idrole}")
 	public Result<User> getAllTrainers(@PathVariable int idrole, @RequestParam int page, @RequestParam int size) {
+		Validations.validatePageAndSize(page, size);
 		Role role = roleRepository.findById(idrole);
 		Validations.validateRole(role);
 		int count = DatabaseHelper.getTrainersCount();
@@ -121,12 +125,12 @@ public class UserController {
 	@GetMapping("trainer-type/{idtraining_type}")
 	public Result<User> getTrainerByType(@PathVariable int idtraining_type, @RequestParam int page,
 			@RequestParam int size) {
+		Validations.validatePageAndSize(page, size);
 		TrainingType trainingType = trainingTypeRepository.findById(idtraining_type);
 		Validations.validateTrainingType(trainingType);
 		int count = DatabaseHelper.getTrainersCountByType(idtraining_type);
 		List<User> trainers = userRepository.findByTrainerTypes(trainingType, PageRequest.of(page, size));
 		return new Result<User>(count, trainers);
-
 	}
 
 	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
@@ -199,7 +203,6 @@ public class UserController {
 		Validations.validateTrainingType(trainingType);
 		user.removeTrainingType(trainingType);
 		userRepository.save(user);
-
 	}
 
 	@PostMapping("bann-user/{iduser}")

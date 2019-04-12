@@ -42,7 +42,7 @@ public class MsgController {
 			@RequestParam int start, @RequestParam int size) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		Validations.validateIndexes(start, size);
+		Validations.validateStartAndSize(start, size);
 		int senderId = token.getUser().getId();
 		int count = DatabaseHelper.getSentMsgCount(senderId);
 		List<Message> msgs = messageRepository.findSentMessages(senderId, start, size);
@@ -54,7 +54,7 @@ public class MsgController {
 			@RequestParam int start, @RequestParam int size, @PathVariable int userId ) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		Validations.validateIndexes(start, size);
+		Validations.validateStartAndSize(start, size);
 		int count = DatabaseHelper.getSentMsgCount(userId);
 		List<Message> msgs = messageRepository.findSentMessages(userId, start, size);
 		return new Result<Message>(count, msgs);
@@ -65,7 +65,7 @@ public class MsgController {
 			@RequestParam int start, @RequestParam int size) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		Validations.validateIndexes(start, size);
+		Validations.validateStartAndSize(start, size);
 		int receiverId = token.getUser().getId();
 		int count = DatabaseHelper.getInboxMsgCount(receiverId);
 		List<Message> msgs = messageRepository.findInboxMessages(receiverId, start, size);
@@ -77,7 +77,7 @@ public class MsgController {
 			@RequestParam int start, @RequestParam int size, @PathVariable int userId) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		Validations.validateIndexes(start, size);
+		Validations.validateStartAndSize(start, size);
 		int count = DatabaseHelper.getInboxMsgCount(userId);
 		List<Message> msgs = messageRepository.findInboxMessages(userId, start, size);
 		return new Result<Message>(count, msgs);
@@ -123,7 +123,7 @@ public class MsgController {
 			@RequestParam int size) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
-		Validations.validateIndexes(start, size);
+		Validations.validateStartAndSize(start, size);
 		User trainer = userRepository.findByUsername(trainerUsername);
 		Validations.validateUser(trainer);
 		User client = userRepository.findByUsername(clientUsername);

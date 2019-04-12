@@ -143,7 +143,7 @@ public class TrainingSessionController {
 		trainingSessionRepository.delete(trainingSession);
 	}
 
-	@GetMapping("/notify-booked-sessions")//
+	@GetMapping("/notify-booked-sessions")
 	public List<TrainingSession> notifyForUnreadSessions(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
 		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		Validations.validateToken(token);
@@ -199,7 +199,7 @@ public class TrainingSessionController {
 	@GetMapping("/reviews-trainer/{fk_trainer_id}")
 	public Result<Review> getTrainerReview(@PathVariable int fk_trainer_id, @RequestParam int start,
 			@RequestParam int end) {
-		Validations.validateIndexes(start, end);
+		Validations.validateStartAndSize(start, end);
 		List<Review> reviews = reviewRepository.getTrainerComments(fk_trainer_id, start, end);
 		int count = DatabaseHelper.getTrainersReviewsCount(fk_trainer_id);
 		return new Result<Review>(count, reviews);
