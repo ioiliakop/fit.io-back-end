@@ -39,7 +39,6 @@ public class RegisterController {
 		if ((user2 == null) && (user3 == null)) {
 			String password = user.retrievePassword();
 			String random = UUID.randomUUID().toString();
-			;
 			user.setRandomNum(random);
 			String sha256hex = DigestUtils.sha256Hex(password + random);
 			user.setPassword(sha256hex);
@@ -48,7 +47,10 @@ public class RegisterController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username Already Exists");
 		} else if ((user2 == null) && (user3 != null)) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email Already Exists");
+		} else if ((user2 != null) && (user3 != null)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email and Username Already Exist");
 		}
+		
 	}
 
 //	@PostMapping("/confirmed/{iduser}")
