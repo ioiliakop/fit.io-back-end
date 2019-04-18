@@ -1,4 +1,4 @@
-# fit.io-front-end
+# fit.io-back-end
 
 The back-end part of the fit.io web application
 #### Links to the other parts
