@@ -2,9 +2,8 @@
 
 The back-end part of fit.io. A RESTful web application for finding personal trainers.
 
-#### Links to the other parts
+#### Link to the front-end part
 * [fit.io front-end](https://github.com/ioiliakop/fit.io-front-end)
-* [fit.io db](https://github.com/ioiliakop/fit.io-db)
 
 ## Built with
 
@@ -12,7 +11,7 @@ The back-end part of fit.io. A RESTful web application for finding personal trai
 * [Java 1.8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [MySQL Community Server 8.0](https://dev.mysql.com/downloads/mysql/)
 
-## Model used
+## MySQL schema used
 
 ![DB model](db/model.png)
 
