@@ -15,5 +15,11 @@ The back-end part of fit.io. A RESTful web application for finding personal trai
 
 ![DB model](db/model.png)
 
+## Notes
+In the sample data included, for admin user/role, password is the same as the username  
+username: admin  
+password: admin
+
 ## Information
+
 More information about the app and it's features can be found on the [front-end part](https://github.com/ioiliakop/fit.io-front-end).
